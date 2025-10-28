@@ -35,7 +35,7 @@ async function loadTeams() {
   const r = await fetch(`${API_URL}?action=getteams`);
   const d = await r.json();
   if (!d.ok) return;
-  teams = d.teams || [];
+  teams = (d.teams || []).filter(t => Array.isArray(t.members) && t.members.length === 5);
 }
 
 async function loadPngMap() {
@@ -80,12 +80,36 @@ function norm(s) {
 
 function getImgForName(name) { return pngMap[norm(name)] || ""; }
 
+function ensureMissingPlaceholder(slot) {
+  let ph = slot.querySelector(".preview .missing-ph");
+  if (!ph) {
+    ph = document.createElement("div");
+    ph.className = "missing-ph";
+    ph.title = "No image found";
+    slot.querySelector(".preview").appendChild(ph);
+  }
+  return ph;
+}
+
+function hideMissingPlaceholder(slot) {
+  const ph = slot.querySelector(".preview .missing-ph");
+  if (ph) ph.remove();
+}
+
 function updatePreviewForSelect(sel) {
   const slot = sel.closest(".slot");
   const img = slot.querySelector(".preview img");
   const url = getImgForName(sel.value);
-  if (url) { img.src = url; img.style.display = "block"; }
-  else { img.removeAttribute("src"); img.style.display = "none"; }
+  if (url) {
+    hideMissingPlaceholder(slot);
+    img.src = url; 
+    img.style.display = "block";
+  } else {
+    img.removeAttribute("src"); 
+    img.style.display = "none";
+    const ph = ensureMissingPlaceholder(slot);
+    ph.textContent = "?";
+  }
 }
 
 function resetUI() {
