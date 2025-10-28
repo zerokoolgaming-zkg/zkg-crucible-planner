@@ -1,4 +1,4 @@
-const API_URL = "https://script.google.com/macros/s/PASTE_YOUR_DEPLOYED_WEBAPP_URL_HERE/exec";
+const API_URL = "https://script.google.com/macros/s/AKfycbwgqUa14K4cMZVDP7qxg6rqDs17vGKSiWCVJOavIA-D0oC6o2SkhvqwJHuJ4oZdqtE/exec";
 
 const ddWrap=document.getElementById("dropdowns");
 const resultEl=document.getElementById("result");
