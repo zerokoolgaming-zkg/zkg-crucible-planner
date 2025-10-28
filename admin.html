@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Admin • ZKG Crucible Planner</title>
+  <link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+  <main class="container">
+    <h1>Admin Portal</h1>
+
+    <section class="card">
+      <h2>Login</h2>
+      <input id="pwd" type="password" placeholder="Enter password"/>
+      <button id="loginBtn">Login</button>
+      <div id="loginMsg" class="muted"></div>
+    </section>
+
+    <section id="adminPanel" class="card" style="display:none;">
+      <h2>Sheet Snapshot</h2>
+      <button id="refreshBtn">Refresh</button>
+      <pre id="snapshot" class="scroll"></pre>
+
+      <h3>Update a Range</h3>
+      <p class="muted">Paste a small 2D JSON array (e.g. [[\"A\",\"B\"],[\"C\",\"D\"]])</p>
+      <input id="rangeA1" placeholder="e.g. F2:J2"/>
+      <textarea id="valuesJson" rows="5" placeholder='[["Name1","..."],["Name2","..."]]'></textarea>
+      <button id="updateBtn">Update Range</button>
+      <div id="updateMsg" class="muted"></div>
+    </section>
+  </main>
+
+  <script src="admin.js"></script>
+</body>
+</html>
