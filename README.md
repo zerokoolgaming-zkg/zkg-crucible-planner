@@ -1,22 +1,9 @@
-# ZKG Crucible Planner — Hero Animated Edition
+# ZKG Crucible Planner — v3
 
-- MSF-style header (metallic navy) with **alternating gold shimmer** every ~10s
-- Circular emblem logo + favicon
-- Mobile-friendly responsive layout
-- PNG portrait rendering from "PNG files" tab (A: name, B: PNG URL)
-- Admin portal (password **Jujub1234!**)
+- Team selector (Team List tab) auto-fills 5 members
+- Per-dropdown portrait previews (PNG files tab)
+- Robust PNG support (converts Google Drive links)
 
-## Deploy
-1) **Apps Script backend**
-   - Google Sheet → Extensions → Apps Script
-   - Paste `Code.gs` (Sheet ID preset: 1Mq88NZUs6rIsbQFGmR_4koqxZofYeFS063-S81GtShk)
-   - Deploy → New deployment → Web app (Execute as Me, Access Anyone)
+**API URL**: https://script.google.com/macros/s/AKfycbwgqUa14K4cMZVDP7qxg6rqDs17vGKSiWCVJOavIA-D0oC6o2SkhvqwJHuJ4oZdqtE/exec
 
-2) **GitHub Pages**
-   - Create public repo `zkg-crucible-planner`
-   - Upload all files from this folder
-   - Settings → Pages → main / (root)
-   - Site: `https://<you>.github.io/zkg-crucible-planner/`
-
-Frontend already points to your API URL:
-https://script.google.com/macros/s/AKfycbwgqUa14K4cMZVDP7qxg6rqDs17vGKSiWCVJOavIA-D0oC6o2SkhvqwJHuJ4oZdqtE/exec
+**Deploy**: Upload files to GitHub Pages root; replace Apps Script with `Code.gs` and deploy Web App.

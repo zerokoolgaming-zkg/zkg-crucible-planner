@@ -1,5 +1,5 @@
-const API_URL = "https://script.google.com/macros/s/AKfycbwgqUa14K4cMZVDP7qxg6rqDs17vGKSiWCVJOavIA-D0oC6o2SkhvqwJHuJ4oZdqtE/exec";
 
+const API_URL="https://script.google.com/macros/s/AKfycbwgqUa14K4cMZVDP7qxg6rqDs17vGKSiWCVJOavIA-D0oC6o2SkhvqwJHuJ4oZdqtE/exec";
 const pwdEl=document.getElementById("pwd");
 const loginBtn=document.getElementById("loginBtn");
 const loginMsg=document.getElementById("loginMsg");
@@ -10,34 +10,30 @@ const rangeA1El=document.getElementById("rangeA1");
 const valuesJsonEl=document.getElementById("valuesJson");
 const updateBtn=document.getElementById("updateBtn");
 const updateMsg=document.getElementById("updateMsg");
-
 let token=null;
-
 loginBtn.addEventListener("click", async ()=>{
   const pw=pwdEl.value.trim(); loginMsg.textContent="";
-  try{const u=`${API_URL}?action=admin_get_sheet_snapshot&password=${encodeURIComponent(pw)}`;
-    const res=await fetch(u); const data=await res.json();
+  try{
+    const res=await fetch(`${API_URL}?action=admin_get_sheet_snapshot&password=${encodeURIComponent(pw)}`);
+    const data=await res.json();
     if(!data.ok) throw new Error(data.error||"Unauthorized");
     token=pw; panel.style.display="block"; snapshotEl.textContent=JSON.stringify(data.data,null,2);
     loginMsg.textContent="✅ Logged in successfully.";
   }catch(e){ loginMsg.textContent="❌ Login failed: "+e.message; }
 });
-
 refreshBtn.addEventListener("click", async ()=>{
   if(!token) return;
-  const u=`${API_URL}?action=admin_get_sheet_snapshot&password=${encodeURIComponent(token)}`;
-  const res=await fetch(u); const data=await res.json();
+  const res=await fetch(`${API_URL}?action=admin_get_sheet_snapshot&password=${encodeURIComponent(token)}`);
+  const data=await res.json();
   snapshotEl.textContent=data.ok?JSON.stringify(data.data,null,2):data.error;
 });
-
 updateBtn.addEventListener("click", async ()=>{
   if(!token){ updateMsg.textContent="Not logged in."; return; }
-  updateMsg.textContent="";
-  try{const rangeA1=rangeA1El.value.trim();
+  try{
+    const rangeA1=rangeA1El.value.trim();
     const values=JSON.parse(valuesJsonEl.value.trim());
-    const u=`${API_URL}?action=admin_update&password=${encodeURIComponent(token)}&rangeA1=${encodeURIComponent(rangeA1)}&values=${encodeURIComponent(JSON.stringify(values))}`;
-    const res=await fetch(u); const data=await res.json();
-    if(!data.ok) throw new Error(data.error||"Update failed");
-    updateMsg.textContent="✅ Updated successfully.";
+    const res=await fetch(`${API_URL}?action=admin_update&password=${encodeURIComponent(token)}&rangeA1=${encodeURIComponent(rangeA1)}&values=${encodeURIComponent(JSON.stringify(values))}`);
+    const data=await res.json();
+    updateMsg.textContent=data.ok?"✅ Updated successfully.":"❌ "+(data.error||"Update failed");
   }catch(e){ updateMsg.textContent="❌ Error: "+e.message; }
 });

@@ -1,45 +1,18 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="utf-8"/>
-<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<!doctype html>
+<html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Admin • ZKG Crucible Planner</title>
-<link rel="icon" type="image/x-icon" href="favicon.ico"/>
-<link rel="stylesheet" href="style.css"/>
-</head>
+<link rel="stylesheet" href="style.css"><link rel="icon" href="favicon.ico"></head>
 <body>
-<header class="msf-header">
-  <div class="header-inner">
-    <img src="logo.png" alt="ZKG Crucible Planner" class="logo"/>
-    <nav class="nav">
-      <a href="index.html" class="nav-link">Back</a>
-    </nav>
-  </div>
-  <div class="gold-underline"></div>
-</header>
-
+<header class="msf-header"><div class="header-inner"><img src="logo.png" class="logo"><nav><a class="nav-link" href="index.html">Back</a></nav></div><div class="gold-underline"></div></header>
 <main class="container">
-  <section class="card">
-    <h2>Login</h2>
-    <input id="pwd" type="password" placeholder="Enter password"/>
-    <button id="loginBtn" class="primary">Login</button>
-    <div id="loginMsg" class="muted" style="margin-top:8px"></div>
-  </section>
-
-  <section id="adminPanel" class="card" style="display:none;">
-    <h2>Sheet Snapshot</h2>
-    <button id="refreshBtn" class="ghost">Refresh</button>
-    <pre id="snapshot" class="scroll"></pre>
-
-    <h3>Update a Range</h3>
-    <p class="muted">Use A1 range (e.g., <b>F2:J2</b>) and a small JSON 2D array like <code>[["A","B","C","D","E"]]</code>.</p>
-    <input id="rangeA1" placeholder="e.g. F2:J2"/>
-    <textarea id="valuesJson" rows="6" placeholder='[["Name1","Name2","Name3","Name4","Name5"]]'></textarea>
-    <button id="updateBtn" class="primary">Update Range</button>
-    <div id="updateMsg" class="muted" style="margin-top:8px"></div>
-  </section>
+<section class="card"><h2>Login</h2><input id="pwd" type="password" placeholder="Enter password"><button id="loginBtn" class="primary">Login</button><div id="loginMsg" class="muted" style="margin-top:8px"></div></section>
+<section id="adminPanel" class="card" style="display:none;">
+  <h2>Sheet Snapshot</h2><button id="refreshBtn" class="ghost">Refresh</button><pre id="snapshot" class="scroll"></pre>
+  <h3>Update a Range</h3>
+  <p class="muted">Use A1 (e.g., <b>F2:J2</b>) and JSON 2D array like <code>[["A","B","C","D","E"]]</code>.</p>
+  <input id="rangeA1" placeholder="e.g. F2:J2"><textarea id="valuesJson" rows="6" placeholder='[["Name1","Name2","Name3","Name4","Name5"]]'></textarea>
+  <button id="updateBtn" class="primary">Update Range</button><div id="updateMsg" class="muted" style="margin-top:8px"></div>
+</section>
 </main>
-
 <script src="admin.js"></script>
-</body>
-</html>
+</body></html>
