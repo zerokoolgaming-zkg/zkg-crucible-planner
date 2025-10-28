@@ -1,38 +1,39 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1"/>
-  <title>ZKG Cosmic Crucible Counters</title>
-  <link rel="stylesheet" href="style.css"/>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>ZKG Crucible Planner</title>
+<link rel="icon" type="image/x-icon" href="favicon.ico"/>
+<link rel="stylesheet" href="style.css"/>
 </head>
 <body>
-  <main class="container">
-    <h1>ZKG Cosmic Crucible Counters</h1>
-
-    <section class="card">
-      <h2>Select 5 Characters</h2>
-      <div id="dropdowns" class="grid5"></div>
-      <div class="actions">
-        <button id="searchBtn">Find Counters</button>
-        <button id="resetBtn" class="ghost">Reset</button>
-      </div>
-    </section>
-
-    <section class="card">
-      <h2>Result</h2>
-      <div id="result"></div>
-    </section>
-
-    <p class="footnote">
-      End users can only select from dropdowns. All data lives in a protected Google Sheet.
-    </p>
-
-    <nav class="admin-link">
-      <a href="admin.html">Admin</a>
+<header class="msf-header">
+  <div class="header-inner">
+    <img src="logo.png" alt="ZKG Crucible Planner" class="logo"/>
+    <nav class="nav">
+      <a href="admin.html" class="nav-link">Admin</a>
     </nav>
-  </main>
+  </div>
+  <div class="gold-underline"></div>
+</header>
 
-  <script src="app.js"></script>
+<main class="container">
+  <section class="card">
+    <h2>Select 5 Characters</h2>
+    <div id="dropdowns" class="grid5"></div>
+    <div class="actions">
+      <button id="searchBtn" class="primary">Find Counters</button>
+      <button id="resetBtn" class="ghost">Reset</button>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2>Results</h2>
+    <div id="result" class="results"></div>
+  </section>
+</main>
+
+<script src="app.js"></script>
 </body>
 </html>
