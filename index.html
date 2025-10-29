@@ -20,15 +20,53 @@
 
 <main class="container ultra-wide">
   <div id="banner" class="banner hidden">⚠️ Failed to load data. <button id="retryBtn" class="btn small">Retry</button></div>
+  <div id="spinner" class="spinner-wrap"><div class="spinner"></div><div class="spin-text">Loading data…</div></div>
 
   <section class="card">
     <h2>Select Team & Characters</h2>
     <div class="toolbar">
       <div id="characterRow" class="row-six">
-        <div class="dropdown-block"><label>Team</label><select id="teamSelect"><option>Loading…</option></select><div class="preview"></div></div>
-        <div class="dropdown-block"><label>Team Member 1</label><select class="charSelect"></select><div class="preview"><img alt="" /><div class="missing-ph">?</div></div></div><div class="dropdown-block"><label>Team Member 2</label><select class="charSelect"></select><div class="preview"><img alt="" /><div class="missing-ph">?</div></div></div><div class="dropdown-block"><label>Team Member 3</label><select class="charSelect"></select><div class="preview"><img alt="" /><div class="missing-ph">?</div></div></div><div class="dropdown-block"><label>Team Member 4</label><select class="charSelect"></select><div class="preview"><img alt="" /><div class="missing-ph">?</div></div></div><div class="dropdown-block"><label>Team Member 5</label><select class="charSelect"></select><div class="preview"><img alt="" /><div class="missing-ph">?</div></div></div>
+        <div class="dropdown-block">
+          <label>Team</label>
+          <select id="teamSelect"><option>Loading…</option></select>
+          <div class="preview"></div>
+        </div>
+
+        <div class="dropdown-block">
+          <label>Team Member 1</label>
+          <select class="charSelect"></select>
+          <div class="preview"><img alt="" /><div class="missing-ph">?</div></div>
+        </div>
+
+        <div class="dropdown-block">
+          <label>Team Member 2</label>
+          <select class="charSelect"></select>
+          <div class="preview"><img alt="" /><div class="missing-ph">?</div></div>
+        </div>
+
+        <div class="dropdown-block">
+          <label>Team Member 3</label>
+          <select class="charSelect"></></select>
+          <div class="preview"><img alt="" /><div class="missing-ph">?</div></div>
+        </div>
+
+        <div class="dropdown-block">
+          <label>Team Member 4</label>
+          <select class="charSelect"></select>
+          <div class="preview"><img alt="" /><div class="missing-ph">?</div></div>
+        </div>
+
+        <div class="dropdown-block">
+          <label>Team Member 5</label>
+          <select class="charSelect"></select>
+          <div class="preview"><img alt="" /><div class="missing-ph">?</div></div>
+        </div>
       </div>
-      <div class="actions right"><button id="searchBtn" class="btn primary">Find Counters</button><button id="resetBtn" class="btn">Reset</button></div>
+
+      <div class="actions right">
+        <button id="searchBtn" class="btn primary">Find Counters</button>
+        <button id="resetBtn" class="btn">Reset</button>
+      </div>
     </div>
   </section>
 
@@ -38,7 +76,7 @@
   </section>
 </main>
 
-<footer class="footer"><p>© ZKG • MSF-themed utility • <a href="https://marvelstrikeforce.com/en/characters" target="_blank">Character Source</a></p></footer>
+<footer class="footer"><p>© ZKG • MSF-themed utility • <a href="https://marvelstrikeforce.com/en/characters" target="_blank" rel="noreferrer">Character Source</a></p></footer>
 
 <script>window.API_URL="https://script.google.com/macros/s/AKfycbwgqUa14K4cMZVDP7qxg6rqDs17vGKSiWCVJOavIA-D0oC6o2SkhvqwJHuJ4oZdqtE/exec";</script>
 <script src="script.js"></script>
