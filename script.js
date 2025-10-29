@@ -104,9 +104,13 @@ async function onSearch(){
       return;
     }
     resultEl.innerHTML = d.matches.map((m,i)=>{
-      const row = (m.counterTeam||[]).map(c=>`
-        <div class="dropdown-block" style="min-width:140px">
-          <div class="preview"><img src="${escapeHtml(c.img||'')}" alt="${escapeHtml(c.name||'')}" style="display:${c.img?'block':'none'}"/><div class="missing-ph" style="display:${c.img?'none':'flex'}">?</div></div>
+     const row = (m.counterTeam||[]).map(c=>`
+  <div class="dropdown-block compact" style="min-width:140px">
+    <div style="text-align:center;margin-bottom:4px;font-weight:600">${escapeHtml(c.name||'')}</div>
+    <div class="preview"><img src="${escapeHtml(c.img||'')}" alt="${escapeHtml(c.name||'')}" style="display:${c.img?'block':'none'}"/><div class="missing-ph" style="display:${c.img?'none':'flex'}">?</div></div>
+  </div>
+`).join('');
+
           <div style="text-align:center;margin-top:6px">${escapeHtml(c.name||'')}</div>
         </div>
       `).join('');
