@@ -1,4 +1,7 @@
 /* ZKG v4.1.4-fix1 */
+// === BACKEND CONNECTION ===
+const BACKEND_URL = "https://script.google.com/macros/s/AKfycbwgqUa14K4cMZVDP7qxg6rqDs17vGKSiWCVJOavIA-D0oC6o2SkhvqwJHuJ4oZdqtE/exec";
+
 const API_URL = window.API_URL;
 const teamSelect = document.getElementById("teamSelect");
 const charSelects = [...document.querySelectorAll(".charSelect")];
