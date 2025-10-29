@@ -1,4 +1,4 @@
-const API_URL = window.API_URL; const PASSWORD = "Jujub1234!";
+const API_URL = window.API_URL; const PASSWORD="Jujub1234!";
 const pwd=document.getElementById('pwd'), loginBtn=document.getElementById('loginBtn'), msg=document.getElementById('loginMsg');
 const panel=document.getElementById('panel'), refreshBtn=document.getElementById('refreshBtn'), statusEl=document.getElementById('status');
 loginBtn.addEventListener('click',()=>{ if(pwd.value===PASSWORD){ msg.textContent='Logged in.'; panel.style.display='block'; } else { msg.textContent='Invalid password.'; }});
