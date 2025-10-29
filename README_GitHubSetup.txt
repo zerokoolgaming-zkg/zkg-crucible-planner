@@ -1,18 +1,11 @@
-ZKG Crucible Planner — v4.1.4-fix1 (Full, wired to your backend)
+ZKG Crucible Planner — v4.0
+- Team dropdown (Team List A:F)
+- Character dropdowns with PNG previews (PNG files A:B)
+- Admin refresh + Diagnostics
 
-Includes
-- Custom MSF-style emblem (gold ring + lightning burst)
-- Centered loading spinner + Retry banner
-- 6 dropdowns in one row (no desktop scroll)
-- Team autofill, PNG previews under each dropdown
-- Results show names above images
-- Admin page (password: Jujub1234!)
-- Diagnostics page
-- Energy burst header + gold underline animation
-
-Backend: https://script.google.com/macros/s/AKfycbwgqUa14K4cMZVDP7qxg6rqDs17vGKSiWCVJOavIA-D0oC6o2SkhvqwJHuJ4oZdqtE/exec
-
-Deploy (GitHub Pages)
-1) Upload files to repo root
+GitHub Pages:
+1) New repo, upload all files from this folder
 2) Settings → Pages → Build from branch → main / root
-3) Open the GitHub Pages URL
+3) Open: https://<your-username>.github.io/zkg-crucible-planner/
+Backend URL used:
+https://script.google.com/macros/s/AKfycbwgqUa14K4cMZVDP7qxg6rqDs17vGKSiWCVJOavIA-D0oC6o2SkhvqwJHuJ4oZdqtE/exec
