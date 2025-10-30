@@ -1,89 +1,83 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>ZKG Crucible Planner</title>
-  <link rel="icon" href="assets/img/logo.png"/>
-  <link rel="stylesheet" href="style.css"/>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-<header class="msf-header">
-  <a class="brand" href="./" aria-label="ZKG Planner Home">
-    <img class="logo" src="assets/img/logo.png" alt="ZKG Emblem"/>
-    <h1>ZKG Crucible Planner</h1>
-  </a>
-  <div class="live-indicator" title="Backend connection status">
-    <span id="liveDot" class="dot red"></span>
-    <span id="liveText">Offline</span>
-  </div>
-  <div class="energy-bg"></div>
-  <div class="gold-underline"></div>
-</header>
+  <header class="hdr">
+    <div class="brand">
+      <img src="assets/zkg_badge.png" class="badge" alt="ZKG Emblem" />
+      <h1>ZKG Crucible Planner</h1>
+    </div>
+    <div id="live" class="live offline"><span class="dot"></span><span id="liveText">Offline</span></div>
+    <div class="energy"></div>
+    <div class="goldline"></div>
+  </header>
 
-<main class="container ultra-wide">
-  <div id="banner" class="banner hidden">⚠️ Failed to load data from backend. <button id="retryBtn" class="btn small">Retry</button></div>
-  <div id="spinner" class="spinner-wrap">
-    <img src="assets/icons/spinner.svg" class="svgspin" alt="Loading"/>
-    <div class="spin-text">Loading data…</div>
-  </div>
+  <main class="container">
+    <div id="errorBox" class="error" style="display:none"></div>
+    <div id="loadingSpinner" class="loading">
+      <div class="spinner"></div>
+      <span>Loading data…</span>
+    </div>
 
-  <section class="card">
-    <h2>Select Team & Characters</h2>
-    <div class="toolbar">
-      <div class="row-six">
-        <div class="dropdown-block">
+    <section class="card">
+      <h2>Select Team & Characters</h2>
+      <div class="row6" id="selectorRow">
+        <div class="slot">
           <label>Team</label>
           <select id="teamSelect"><option>Loading…</option></select>
-          <div class="preview"></div>
+          <div class="portrait ph"></div>
         </div>
-        <div class="dropdown-block">
+        
+        <div class="slot">
           <label>Team Member 1</label>
-          <select class="charSelect"></select>
-          <div class="preview"><img alt=""/><div class="missing-ph">?</div></div>
+          <select id="char1"></select>
+          <div class="portrait"><img id="charImg1" alt="portrait"/></div>
         </div>
-        <div class="dropdown-block">
+        <div class="slot">
           <label>Team Member 2</label>
-          <select class="charSelect"></select>
-          <div class="preview"><img alt=""/><div class="missing-ph">?</div></div>
+          <select id="char2"></select>
+          <div class="portrait"><img id="charImg2" alt="portrait"/></div>
         </div>
-        <div class="dropdown-block">
+        <div class="slot">
           <label>Team Member 3</label>
-          <select class="charSelect"></select>
-          <div class="preview"><img alt=""/><div class="missing-ph">?</div></div>
+          <select id="char3"></select>
+          <div class="portrait"><img id="charImg3" alt="portrait"/></div>
         </div>
-        <div class="dropdown-block">
+        <div class="slot">
           <label>Team Member 4</label>
-          <select class="charSelect"></select>
-          <div class="preview"><img alt=""/><div class="missing-ph">?</div></div>
+          <select id="char4"></select>
+          <div class="portrait"><img id="charImg4" alt="portrait"/></div>
         </div>
-        <div class="dropdown-block">
+        <div class="slot">
           <label>Team Member 5</label>
-          <select class="charSelect"></select>
-          <div class="preview"><img alt=""/><div class="missing-ph">?</div></div>
+          <select id="char5"></select>
+          <div class="portrait"><img id="charImg5" alt="portrait"/></div>
         </div>
       </div>
-      <div class="actions right">
-        <button id="searchBtn" class="btn primary">Find Counters</button>
+      <div class="actions">
+        <button id="findCounters" class="btn primary">Find Counters</button>
         <button id="resetBtn" class="btn">Reset</button>
       </div>
-    </div>
-  </section>
+    </section>
 
-  <section class="card">
-    <h2>Results</h2>
-    <div id="result" class="result-area muted">Choose exactly 5 characters to search.</div>
-  </section>
+    <section class="card">
+      <h2>Results</h2>
+      <div id="results" class="results muted">Choose exactly 5 characters to search.</div>
+    </section>
 
-  <p class="muted footnote">Admin diagnostics available at <code>/diagnostics.html</code></p>
-</main>
+    <p class="muted small">Diagnostics available at <code>/diagnostics.html</code></p>
+  </main>
 
-<footer class="footer"><p>© ZKG • Unofficial MSF utility.</p></footer>
+  <footer class="ftr muted small">© ZKG • Unofficial MSF utility.</footer>
 
-<script>
-  window.BACKEND_URL = "https://script.google.com/macros/s/AKfycbweQfrrV7MW5Z49MxYWe6nQ25Y5whGe_VHXZ6-gkR8x/exec";
-  window.LIVE_REPING_MS = 5 * 60 * 1000;
-</script>
-<script src="script.js"></script>
+  <script>
+    const backend_url = "https://script.google.com/macros/s/AKfycbweQfrrV7MW5Z49MxYWe6nQ25Y5whGe_VHXZ6-gkR8x/dev";
+  </script>
+  <script src="script.js"></script>
 </body>
 </html>
