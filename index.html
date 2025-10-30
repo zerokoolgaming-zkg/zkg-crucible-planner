@@ -1,63 +1,40 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>ZKG Crucible Planner</title>
-  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <header class="hdr">
     <div class="brand">
-      <img src="assets/zkg_badge.png" class="badge" alt="ZKG Emblem" />
+      <img src="assets/zkg_badge.png" class="badge" alt="ZKG Emblem">
       <h1>ZKG Crucible Planner</h1>
     </div>
-    <div id="live" class="live offline"><span class="dot"></span><span id="liveText">Offline</span></div>
     <div class="energy"></div>
     <div class="goldline"></div>
   </header>
 
   <main class="container">
+    <a class="hiddenAdmin" href="diagnostics.html" aria-label="Admin diagnostics"></a>
+
     <div id="errorBox" class="error" style="display:none"></div>
-    <div id="loadingSpinner" class="loading">
-      <div class="spinner"></div>
-      <span>Loading data…</span>
-    </div>
+    <div id="loadingSpinner" class="loading"><div class="spinner"></div><span>Loading data…</span></div>
 
     <section class="card">
       <h2>Select Team & Characters</h2>
-      <div class="row6" id="selectorRow">
+      <div class="row6">
         <div class="slot">
-          <label>Team</label>
+          <label>Team (optional)</label>
           <select id="teamSelect"><option>Loading…</option></select>
           <div class="portrait ph"></div>
         </div>
-        
-        <div class="slot">
-          <label>Team Member 1</label>
-          <select id="char1"></select>
-          <div class="portrait"><img id="charImg1" alt="portrait"/></div>
-        </div>
-        <div class="slot">
-          <label>Team Member 2</label>
-          <select id="char2"></select>
-          <div class="portrait"><img id="charImg2" alt="portrait"/></div>
-        </div>
-        <div class="slot">
-          <label>Team Member 3</label>
-          <select id="char3"></select>
-          <div class="portrait"><img id="charImg3" alt="portrait"/></div>
-        </div>
-        <div class="slot">
-          <label>Team Member 4</label>
-          <select id="char4"></select>
-          <div class="portrait"><img id="charImg4" alt="portrait"/></div>
-        </div>
-        <div class="slot">
-          <label>Team Member 5</label>
-          <select id="char5"></select>
-          <div class="portrait"><img id="charImg5" alt="portrait"/></div>
-        </div>
+        <div class="slot"><label>Team Member 1</label><select id="char1"></select><div class="portrait"><img id="charImg1" alt=""></div></div>
+        <div class="slot"><label>Team Member 2</label><select id="char2"></select><div class="portrait"><img id="charImg2" alt=""></div></div>
+        <div class="slot"><label>Team Member 3</label><select id="char3"></select><div class="portrait"><img id="charImg3" alt=""></div></div>
+        <div class="slot"><label>Team Member 4</label><select id="char4"></select><div class="portrait"><img id="charImg4" alt=""></div></div>
+        <div class="slot"><label>Team Member 5</label><select id="char5"></select><div class="portrait"><img id="charImg5" alt=""></div></div>
       </div>
       <div class="actions">
         <button id="findCounters" class="btn primary">Find Counters</button>
@@ -70,13 +47,14 @@
       <div id="results" class="results muted">Choose exactly 5 characters to search.</div>
     </section>
 
-    <p class="muted small">Diagnostics available at <code>/diagnostics.html</code></p>
+    <p class="muted small">Diagnostics: <a href="diagnostics.html">/diagnostics.html</a></p>
   </main>
 
   <footer class="ftr muted small">© ZKG • Unofficial MSF utility.</footer>
 
   <script>
-    const backend_url = "https://script.google.com/macros/s/AKfycbweQfrrV7MW5Z49MxYWe6nQ25Y5whGe_VHXZ6-gkR8x/dev";
+    const backend_url = "https://script.google.com/macros/s/AKfycbz9IjPZ-hotdxXl6DjEkVqA1phfPLLgs4DsjBTrbRaaqqN2Jp8_lo2Uu7V1XJhvexR9Zg/exec"; // confirmed EXEC url
+    const PORTRAIT_BASE = "png/";       // Option A: local /png folder
   </script>
   <script src="script.js"></script>
 </body>
