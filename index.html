@@ -30,15 +30,15 @@
           <select id="teamSelect"><option>Loading…</option></select>
           <div class="portrait ph"></div>
         </div>
-        <div class="slot"><label>Team Member 1</label><select id="char1"></select><div class="portrait"><img id="charImg1" alt=""></div></div>
-        <div class="slot"><label>Team Member 2</label><select id="char2"></select><div class="portrait"><img id="charImg2" alt=""></div></div>
-        <div class="slot"><label>Team Member 3</label><select id="char3"></select><div class="portrait"><img id="charImg3" alt=""></div></div>
-        <div class="slot"><label>Team Member 4</label><select id="char4"></select><div class="portrait"><img id="charImg4" alt=""></div></div>
-        <div class="slot"><label>Team Member 5</label><select id="char5"></select><div class="portrait"><img id="charImg5" alt=""></div></div>
+        <div class="slot"><label>Team Member 1</label><select id="char1" class="char-select"></select><div class="portrait"><img id="charImg1" alt=""></div></div>
+        <div class="slot"><label>Team Member 2</label><select id="char2" class="char-select"></select><div class="portrait"><img id="charImg2" alt=""></div></div>
+        <div class="slot"><label>Team Member 3</label><select id="char3" class="char-select"></select><div class="portrait"><img id="charImg3" alt=""></div></div>
+        <div class="slot"><label>Team Member 4</label><select id="char4" class="char-select"></select><div class="portrait"><img id="charImg4" alt=""></div></div>
+        <div class="slot"><label>Team Member 5</label><select id="char5" class="char-select"></select><div class="portrait"><img id="charImg5" alt=""></div></div>
       </div>
       <div class="actions">
-        <button id="findCounters" class="btn primary">Find Counters</button>
         <button id="resetBtn" class="btn">Reset</button>
+        <span class="muted small">Counters auto-run when 5 members are selected.</span>
       </div>
     </section>
 
@@ -53,8 +53,8 @@
   <footer class="ftr muted small">© ZKG • Unofficial MSF utility.</footer>
 
   <script>
-    const backend_url = "https://script.google.com/macros/s/AKfycbz9IjPZ-hotdxXl6DjEkVqA1phfPLLgs4DsjBTrbRaaqqN2Jp8_lo2Uu7V1XJhvexR9Zg/exec"; // confirmed EXEC url
-    const PORTRAIT_BASE = "png/";       // Option A: local /png folder
+    const backend_url = "https://script.google.com/macros/s/AKfycbz9IjPZ-hotdxXl6DjEkVqA1phfPLLgs4DsjBTrbRaaqqN2Jp8_lo2Uu7V1XJhvexR9Zg/exec";
+    const PORTRAIT_BASE = "https://zerokoolgaming-zkg.github.io/zkg-crucible-planner/png/";
   </script>
   <script src="script.js"></script>
 </body>

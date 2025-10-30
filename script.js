@@ -1,4 +1,4 @@
-/* ZKG Planner front-end (EXEC + local /png portraits) */
+/* ZKG Planner v4 - auto search, absolute PNG base */
 let PNG_MAP = {}, CHARACTERS = [], TEAMS = [];
 
 const el = id => document.getElementById(id);
@@ -20,13 +20,13 @@ function optionsFrom(list, placeholder){
 }
 function escapeHtml(s){return (s==null?'':String(s)).replace(/[&<>\"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));}
 
-function updatePortrait(i){
-  const name = val(`char${i}`);
+function setPortrait(imgEl, name){
   const file = PNG_MAP[(name||"").toLowerCase()] || "";
-  const img = el(`charImg${i}`);
-  img.src = file ? (PORTRAIT_BASE + file) : "assets/question.png";
-  img.alt = name || "portrait";
+  imgEl.src = file ? (PORTRAIT_BASE + file) : "assets/question.png";
+  imgEl.alt = name || "portrait";
+  imgEl.onerror = () => { imgEl.onerror = null; imgEl.src = "assets/question.png"; };
 }
+function updatePortrait(i){ setPortrait(el(`charImg${i}`), val(`char${i}`)); }
 
 function resetUI(){
   el('teamSelect').selectedIndex = 0;
@@ -38,6 +38,11 @@ function membersSelected(){
   const m = [];
   for(let i=1;i<=5;i++){ const n = val(`char${i}`); if(n) m.push(n); }
   return m;
+}
+
+function maybeAutoSearch(){
+  const M = membersSelected();
+  if (M.length === 5) { findCounters(M); }
 }
 
 function renderResults(payload){
@@ -57,7 +62,7 @@ function renderResults(payload){
       const file = PNG_MAP[(name||"").toLowerCase()] || "";
       const src = file ? (PORTRAIT_BASE + file) : "assets/question.png";
       div.innerHTML = `<div class="nameTag">${escapeHtml(name||"")}</div>
-                       <img src="${src}" alt="${escapeHtml(name||'portrait')}" width="108" height="108">`;
+                       <img src="${src}" alt="${escapeHtml(name||'portrait')}" width="108" height="108" onerror="this.src='assets/question.png'">`;
       grid.appendChild(div);
     });
     const meta = document.createElement('div');
@@ -76,6 +81,13 @@ function renderResults(payload){
   });
 }
 
+async function findCounters(preset){
+  const M = preset || membersSelected();
+  if(M.length !== 5){ return; }
+  const payload = await api('findCounters', { members: encodeURIComponent(M.join('|')) });
+  renderResults(payload);
+}
+
 async function init(){
   show('loadingSpinner','flex'); clearError();
   try {
@@ -85,7 +97,6 @@ async function init(){
     if(!ping.ok) throw new Error("Backend ping failed");
     if(!pngs.ok || !teams.ok || !chars.ok) throw new Error("Data calls not OK");
 
-    // Build map from "PNG files": { lowerName: filename }
     if (pngs.map) {
       PNG_MAP = pngs.map;
     } else if (Array.isArray(pngs.pngs)) {
@@ -100,7 +111,11 @@ async function init(){
 
     el('teamSelect').innerHTML = optionsFrom(TEAMS, '(Optional) Choose a Team');
     const charOpts = optionsFrom(CHARACTERS, 'Choose character');
-    for(let i=1;i<=5;i++){ el(`char${i}`).innerHTML = charOpts; el(`char${i}`).addEventListener('change', ()=>updatePortrait(i)); updatePortrait(i); }
+    for(let i=1;i<=5;i++){
+      el(`char${i}`).innerHTML = charOpts;
+      el(`char${i}`).addEventListener('change', ()=>{ updatePortrait(i); maybeAutoSearch(); });
+      updatePortrait(i);
+    }
 
     el('teamSelect').addEventListener('change', async ()=>{
       const team = val('teamSelect');
@@ -110,21 +125,16 @@ async function init(){
         info.members.forEach((name,idx) => {
           const sel = el(`char${idx+1}`);
           if (!name) return;
-          let i = Array.from(sel.options).findIndex(o => o.value.toLowerCase() === name.toLowerCase());
+          let i = Array.from(sel.options).findIndex(o => o.value.toLowerCase() === String(name).toLowerCase());
           if (i < 0) { sel.insertAdjacentHTML('beforeend', `<option>${escapeHtml(name)}</option>`); i = Array.from(sel.options).length-1; }
           sel.selectedIndex = i;
           updatePortrait(idx+1);
         });
+        maybeAutoSearch();
       }
     });
 
     el('resetBtn').addEventListener('click', resetUI);
-    el('findCounters').addEventListener('click', async ()=>{
-      const M = membersSelected();
-      if(M.length !== 5){ renderResults({ok:false, error:"Please select exactly 5 members."}); return; }
-      const payload = await api('findCounters', { members: encodeURIComponent(M.join('|')) });
-      renderResults(payload);
-    });
   } catch(e) {
     console.error(e);
     showError('Failed to load data.');
