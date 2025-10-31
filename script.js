@@ -1,4 +1,4 @@
-/* ZKG Planner v4.2 - floating donate, discord link, back-to-top, energy bg */
+/* ZKG Planner v4 - auto search, absolute PNG base */
 let PNG_MAP = {}, CHARACTERS = [], TEAMS = [];
 
 const el = id => document.getElementById(id);
@@ -32,7 +32,6 @@ function resetUI(){
   el('teamSelect').selectedIndex = 0;
   for(let i=1;i<=5;i++){ el(`char${i}`).selectedIndex = 0; updatePortrait(i); }
   const res = el('results'); res.classList.add('muted'); res.innerHTML = "Choose exactly 5 characters to search.";
-  hide('teamLoadingMsg');
 }
 
 function membersSelected(){
@@ -41,20 +40,9 @@ function membersSelected(){
   return m;
 }
 
-function setResultsLoading(on){
-  const root = el('results');
-  if(on){
-    root.classList.remove('muted');
-    root.innerHTML = `<div class="loadingMsg">Searching counters…</div>`;
-  }
-}
-
 function maybeAutoSearch(){
   const M = membersSelected();
-  if (M.length === 5) {
-    setResultsLoading(true);
-    findCounters(M);
-  }
+  if (M.length === 5) { findCounters(M); }
 }
 
 function renderResults(payload){
@@ -79,22 +67,17 @@ function renderResults(payload){
     });
     const meta = document.createElement('div');
     meta.className = 'meta';
-    const extras = (r.extras || []).filter(Boolean);
+    const extras = (r.extras || []).filter(Boolean).join(' • ');
     meta.textContent = [
       r.room ? `Room: ${r.room}` : "",
       r.type ? `Type: ${r.type}` : "",
-      r.tcpDiff ? `TCP Diff: ${r.tcpDiff}` : ""
+      r.tcpDiff ? `TCP Diff: ${r.tcpDiff}` : "",
+      extras
     ].filter(Boolean).join('  |  ');
-
-    const extrasDiv = document.createElement('div');
-    extrasDiv.className = 'extras';
-    if (extras.length) extrasDiv.textContent = extras.join('\n');
-
     root.appendChild(document.createElement('hr'));
     const title = document.createElement('div'); title.className='nameTag'; title.style.margin='6px 0'; title.textContent = `Match #${idx+1}`; root.appendChild(title);
     root.appendChild(grid);
     if (meta.textContent) root.appendChild(meta);
-    if (extras.length) root.appendChild(extrasDiv);
   });
 }
 
@@ -106,13 +89,6 @@ async function findCounters(preset){
 }
 
 async function init(){
-  // back-to-top visibility
-  const btt = el('backToTop');
-  window.addEventListener('scroll', ()=>{
-    if (window.scrollY > 300) btt.style.display = 'block'; else btt.style.display = 'none';
-  });
-  btt.addEventListener('click', ()=>window.scrollTo({top:0, behavior:'smooth'}));
-
   show('loadingSpinner','flex'); clearError();
   try {
     const [ping, pngs, teams, chars] = await Promise.all([
@@ -137,32 +113,24 @@ async function init(){
     const charOpts = optionsFrom(CHARACTERS, 'Choose character');
     for(let i=1;i<=5;i++){
       el(`char${i}`).innerHTML = charOpts;
-      el(`char${i}`).addEventListener('change', ()=>{ updatePortrait(i); setResultsLoading(true); maybeAutoSearch(); });
+      el(`char${i}`).addEventListener('change', ()=>{ updatePortrait(i); maybeAutoSearch(); });
       updatePortrait(i);
     }
 
     el('teamSelect').addEventListener('change', async ()=>{
       const team = val('teamSelect');
       if(!team){ return; }
-      const tmsg = el('teamLoadingMsg');
-      tmsg.textContent = 'Loading team…';
-      show('teamLoadingMsg');
-      try{
-        const info = await api('getTeamMembers', { team });
-        if(info.ok && info.members){
-          info.members.forEach((name,idx) => {
-            const sel = el(`char${idx+1}`);
-            if (!name) return;
-            let i = Array.from(sel.options).findIndex(o => o.value.toLowerCase() === String(name).toLowerCase());
-            if (i < 0) { sel.insertAdjacentHTML('beforeend', `<option>${escapeHtml(name)}</option>`); i = Array.from(sel.options).length-1; }
-            sel.selectedIndex = i;
-            updatePortrait(idx+1);
-          });
-          setResultsLoading(true);
-          maybeAutoSearch();
-        }
-      } finally {
-        hide('teamLoadingMsg');
+      const info = await api('getTeamMembers', { team });
+      if(info.ok && info.members){
+        info.members.forEach((name,idx) => {
+          const sel = el(`char${idx+1}`);
+          if (!name) return;
+          let i = Array.from(sel.options).findIndex(o => o.value.toLowerCase() === String(name).toLowerCase());
+          if (i < 0) { sel.insertAdjacentHTML('beforeend', `<option>${escapeHtml(name)}</option>`); i = Array.from(sel.options).length-1; }
+          sel.selectedIndex = i;
+          updatePortrait(idx+1);
+        });
+        maybeAutoSearch();
       }
     });
 

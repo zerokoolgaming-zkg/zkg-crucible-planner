@@ -23,7 +23,7 @@
     </section>
   </main>
   <script>
-    const backend_url = "YOUR_EXEC_URL_HERE";
+    const backend_url = "https://script.google.com/macros/s/AKfycbz9IjPZ-hotdxXl6DjEkVqA1phfPLLgs4DsjBTrbRaaqqN2Jp8_lo2Uu7V1XJhvexR9Zg/exec";
     async function probe(action, qs="") { const t0=performance.now(); try {
       const r = await fetch(`${backend_url}?action=${action}${qs}&_=${Date.now()}`);
       const j = await r.json(); return { ok: !!(j && j.ok), ms: Math.round(performance.now()-t0), detail:j };
