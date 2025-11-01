@@ -1,69 +1,84 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>ZKG Crucible Planner</title>
+  <link rel="icon" href="assets/logo.png" />
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <a class="donateBtn" href="https://streamelements.com/zerokoolgamer-4649/tip" target="_blank" rel="noopener noreferrer">DONATE TO ZKG</a>
-
-  <header class="hdr">
-    <div class="brand">
-      <img src="assets/zkg_badge.png" class="badge" alt="ZKG Emblem" />
+  <header class="msf-header">
+    <div class="header-inner">
+      <img class="logo" src="assets/logo.png" alt="ZKG Emblem" />
       <h1>ZKG Crucible Planner</h1>
+      <nav>
+        <a class="nav-link" href="admin.html">Admin</a>
+        <a class="nav-link" href="diagnostics.html">Diagnostics</a>
+      </nav>
     </div>
-    <div class="energy"></div>
-    <div class="goldline"></div>
+    <div class="energy-bg"></div>
+    <div class="gold-underline"></div>
   </header>
 
   <main class="container">
-    <a class="hiddenAdmin" href="diagnostics.html" aria-label="Admin diagnostics"></a>
-
-    <div id="errorBox" class="error" style="display:none"></div>
-    <div id="loadingSpinner" class="loading"><div class="spinner"></div><span>Loading data…</span></div>
-
     <section class="card">
       <h2>Select Team & Characters</h2>
-      <div class="row6">
-        <div class="slot">
-          <label>Team (optional)</label>
+
+      <div id="characterRow">
+        <div class="dropdown-block">
+          <label>Team</label>
           <select id="teamSelect"><option>Loading…</option></select>
-          <div class="portrait ph"></div>
-          <div id="teamLoadingMsg" class="loadingMsg" style="display:none"></div>
         </div>
-        <div class="slot"><label>Team Member 1</label><select id="char1" class="char-select"></select><div class="portrait"><img id="charImg1" alt=""></div></div>
-        <div class="slot"><label>Team Member 2</label><select id="char2" class="char-select"></select><div class="portrait"><img id="charImg2" alt=""></div></div>
-        <div class="slot"><label>Team Member 3</label><select id="char3" class="char-select"></select><div class="portrait"><img id="charImg3" alt=""></div></div>
-        <div class="slot"><label>Team Member 4</label><select id="char4" class="char-select"></select><div class="portrait"><img id="charImg4" alt=""></div></div>
-        <div class="slot"><label>Team Member 5</label><select id="char5" class="char-select"></select><div class="portrait"><img id="charImg5" alt=""></div></div>
+
+        <div class="dropdown-block">
+          <label>Team Member 1</label>
+          <select class="charSelect"></select>
+          <div class="preview"><img alt="" /><div class="missing-ph">?</div></div>
+        </div>
+
+        <div class="dropdown-block">
+          <label>Team Member 2</label>
+          <select class="charSelect"></select>
+          <div class="preview"><img alt="" /><div class="missing-ph">?</div></div>
+        </div>
+
+        <div class="dropdown-block">
+          <label>Team Member 3</label>
+          <select class="charSelect"></select>
+          <div class="preview"><img alt="" /><div class="missing-ph">?</div></div>
+        </div>
+
+        <div class="dropdown-block">
+          <label>Team Member 4</label>
+          <select class="charSelect"></select>
+          <div class="preview"><img alt="" /><div class="missing-ph">?</div></div>
+        </div>
+
+        <div class="dropdown-block">
+          <label>Team Member 5</label>
+          <select class="charSelect"></select>
+          <div class="preview"><img alt="" /><div class="missing-ph">?</div></div>
+        </div>
       </div>
+
       <div class="actions">
+        <button id="searchBtn" class="btn primary">Find Counters</button>
         <button id="resetBtn" class="btn">Reset</button>
-        <span class="muted small">Counters auto-run when 5 members are selected.</span>
       </div>
     </section>
 
     <section class="card">
-      <div class="resultsHeader">
-        <h2>Results</h2>
-        <div class="subheader">Submit your Crucible Counters to my <a class="subLink" href="https://discord.gg/c23YXnUWb6" target="_blank" rel="noopener noreferrer">Discord Server</a></div>
-      </div>
-      <div id="results" class="results muted">Choose exactly 5 characters to search.</div>
+      <h2>Results</h2>
+      <div id="result" class="result-area muted">Choose exactly 5 characters to search.</div>
     </section>
-
-    <p class="muted small">Diagnostics: <a href="diagnostics.html">/diagnostics.html</a></p>
   </main>
 
-  <button id="backToTop" class="backTop" aria-label="Back to top" title="Back to top">↑</button>
+  <footer class="footer">
+    <p>© ZKG • MSF-themed utility • <a href="https://marvelstrikeforce.com/en/characters" target="_blank" rel="noreferrer">Character Source</a></p>
+  </footer>
 
-  <footer class="ftr muted small">© ZKG • Unofficial MSF utility.</footer>
-
-  <script>
-    const backend_url = "https://script.google.com/macros/s/AKfycbzpzDgKOzLNXoDBidBZBZpRDANSlhcMiPFfo8aq_nrwqiflTJ_-6Yup__p6RBVQmBqkCA/exec";
-    const PORTRAIT_BASE = "https://zerokoolgaming-zkg.github.io/zkg-crucible-planner/png/";
-  </script>
+  <script>window.API_URL="https://script.google.com/macros/s/AKfycbwgqUa14K4cMZVDP7qxg6rqDs17vGKSiWCVJOavIA-D0oC6o2SkhvqwJHuJ4oZdqtE/exec";</script>
   <script src="script.js"></script>
 </body>
 </html>
