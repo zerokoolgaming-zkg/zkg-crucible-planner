@@ -1,52 +1,35 @@
-body {
-  font-family: 'Orbitron', sans-serif;
-  background-color: #0a1224;
-  color: #f5f5f5;
-  margin: 0;
-  text-align: center;
+:root{
+  --bg:#0a1326;--bg2:#0d1a33;--card:#0f2048;--text:#eef3ff;--muted:#9fb0d1;--accent:#58a3ff;--gold:#ffd24d;
 }
-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 1rem 2rem;
-  background: radial-gradient(circle at top, #0a0f2a, #050811);
-  border-bottom: 3px solid gold;
-}
-.logo {
-  height: 60px;
-}
-#donateButton {
-  background-color: gold;
-  border: none;
-  padding: 0.5rem 1rem;
-  border-radius: 10px;
-  cursor: pointer;
-  font-weight: bold;
-  font-size: 1rem;
-}
-#donateButton:hover {
-  background-color: #ffd700;
-  box-shadow: 0 0 10px gold;
-}
-#discordButton {
-  background-color: #5865f2;
-  color: white;
-  padding: 0.5rem 1rem;
-  border-radius: 8px;
-  font-weight: bold;
-  border: none;
-  cursor: pointer;
-}
-#discordButton:hover {
-  background-color: #4752c4;
-}
-#searchingMessage {
-  font-size: 1.2rem;
-  color: #7ec8ff;
-  animation: blink 1.5s infinite ease-in-out;
-}
-@keyframes blink {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.4; }
-}
+*{box-sizing:border-box} html,body{margin:0;background:var(--bg);color:var(--text);font:16px/1.5 system-ui,Segoe UI,Roboto,Arial}
+.hdr{position:sticky;top:0;background:linear-gradient(180deg,#0d1a33,#061024);box-shadow:0 8px 20px rgba(0,0,0,.4);padding:10px 14px 0;z-index:10;overflow:hidden}
+.brand{display:flex;align-items:center;gap:10px}
+.brand .badge{width:44px;height:44px;border-radius:10px;box-shadow:0 0 0 2px var(--gold),0 0 16px rgba(255,210,77,.25)}
+.hdr h1{margin:0 0 10px 0;font-size:20px;letter-spacing:.4px}
+.live{position:absolute;right:12px;top:10px;border:1px solid #2a3a66;border-radius:999px;padding:6px 10px;display:flex;gap:8px;align-items:center;background:#0b1733;color:#d8e2ff}
+.live .dot{width:10px;height:10px;border-radius:50%;display:inline-block}
+.live.offline .dot{background:#ff6b6b} .live.online .dot{background:#3fe68a}
+.energy{position:absolute;inset:0;pointer-events:none;opacity:.28;background:radial-gradient(ellipse at 20% -40%, rgba(150,180,255,.35), transparent 40%), radial-gradient(ellipse at 80% -30%, rgba(150,180,255,.25), transparent 40%)}
+.goldline{height:3px;background:linear-gradient(90deg,transparent,var(--gold),transparent);box-shadow:0 0 12px var(--gold)}
+.container{max-width:1600px;margin:16px auto;padding:0 14px}
+.card{background:var(--card);border-radius:14px;padding:14px 14px 18px;box-shadow:0 8px 24px rgba(0,0,0,.35);margin-bottom:14px}
+.row6{display:grid;grid-template-columns:repeat(6,1fr);gap:12px}
+.slot label{display:block;color:var(--muted);font-size:.9rem;margin-bottom:6px}
+.slot select{width:100%;padding:10px;border-radius:10px;border:1px solid #2a3a66;background:var(--bg2);color:var(--text);font-weight:600}
+.portrait{margin-top:8px;height:120px;border:1px solid #2a3a66;border-radius:12px;display:flex;align-items:center;justify-content:center;background:#0a142c;overflow:hidden}
+.portrait img{width:108px;height:108px;border-radius:10px;display:block}
+.portrait.ph::before{content:'TEAM';color:var(--muted)}
+.actions{display:flex;gap:10px;justify-content:flex-end;margin-top:10px}
+.btn{appearance:none;border:1px solid #2a3a66;background:#0b1733;color:var(--text);padding:10px 14px;border-radius:10px;cursor:pointer;font-weight:700}
+.btn.primary{background:var(--accent);border:none}
+.loading{display:flex;gap:10px;align-items:center;justify-content:center;margin:8px 0 12px}
+.spinner{width:22px;height:22px;border-radius:50%;border:3px solid #27407a;border-top-color:var(--gold);animation:spin 1s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.error{background:#3a1c1c;border:1px solid #ff6b6b;color:#ffc5c5;padding:10px 12px;border-radius:10px;margin:8px 0}
+.results .row{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px}
+.muted{color:var(--muted)} .small{font-size:.9rem}
+.ftr{text-align:center;padding:18px 8px;color:var(--muted)}
+.diag .diaglist{list-style:none;padding:0;margin:10px 0 0 0} .diag .diaglist li{padding:6px 8px;border-radius:8px;margin-bottom:8px}
+.diag .ok{background:#0f2a1f;color:#a8f0c5} .diag .bad{background:#3a1c1c;color:#ffc5c5}
+@media (max-width:1100px){.row6{grid-template-columns:repeat(3,1fr)}}
+@media (max-width:720px){.row6{grid-template-columns:repeat(2,1fr)} .portrait{height:110px} .portrait img{width:98px;height:98px}}
