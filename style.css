@@ -5,7 +5,8 @@
 .brand .badge{width:44px;height:44px;border-radius:10px;box-shadow:0 0 0 2px var(--gold),0 0 16px rgba(255,210,77,.25)}
 .hdr h1{margin:0 0 10px 0;font-size:20px;letter-spacing:.4px}
 .energy{position:absolute;inset:0;pointer-events:none;opacity:.28;background:radial-gradient(ellipse at 20% -40%, rgba(150,180,255,.35), transparent 40%), radial-gradient(ellipse at 80% -30%, rgba(150,180,255,.25), transparent 40%)}
-.goldline{height:3px;background:linear-gradient(90deg,transparent,var(--gold),transparent);box-shadow:0 0 12px var(--gold)}
+.goldline{height:3px;background:linear-gradient(90deg,transparent,var(--gold),transparent);box-shadow:0 0 12px var(--gold);animation:glow 2.5s ease-in-out infinite alternate}
+@keyframes glow{from{opacity:.6}to{opacity:1}}
 .container{max-width:1600px;margin:16px auto;padding:0 14px}
 .card{background:var(--card);border-radius:14px;padding:14px 14px 18px;box-shadow:0 8px 24px rgba(0,0,0,.35);margin-bottom:14px}
 .row6{display:grid;grid-template-columns:repeat(6,1fr);gap:12px}
@@ -29,5 +30,6 @@
 .meta{margin-top:10px;color:var(--muted);font-size:.9rem}
 .diag .diaglist{list-style:none;padding:0;margin:10px 0 0 0} .diag .diaglist li{padding:6px 8px;border-radius:8px;margin-bottom:8px}
 .diag .ok{background:#0f2a1f;color:#a8f0c5} .diag .bad{background:#3a1c1c;color:#ffc5c5}
+.hiddenAdmin{position:absolute;top:0;left:0;width:48px;height:48px;opacity:0}
 @media (max-width:1100px){.row6{grid-template-columns:repeat(3,1fr)} .resultsGrid{grid-template-columns:repeat(2,1fr)}}
 @media (max-width:720px){.row6{grid-template-columns:repeat(2,1fr)} .resultsGrid{grid-template-columns:1fr} .portrait img{width:98px;height:98px}}
