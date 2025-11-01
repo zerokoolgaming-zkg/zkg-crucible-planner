@@ -23,7 +23,7 @@
   <div class="gold-underline"></div>
 </header>
 
-<main class="container">
+<main class="container ultra-wide">
   <section class="card">
     <h2>Live API Checks</h2>
     <div id="summary" class="muted">Loading…</div>
@@ -48,8 +48,16 @@ const API_URL="https://script.google.com/macros/s/AKfycbwgqUa14K4cMZVDP7qxg6rqDs
   const tms=await fetch(API_URL+'?action=getteams').then(r=>r.json()).catch(()=>({ok:false}));
   const s=document.getElementById('summary');
   s.innerHTML='Ping: '+(ping.ok?'<b class="ok">OK</b>':'<b class="bad">FAIL</b>')+' • PNGs: '+(png.ok?'<b class="ok">OK</b>':'<b class="bad">FAIL</b>')+' • Teams: '+(tms.ok?'<b class="ok">OK</b>':'<b class="bad">FAIL</b>');
-  if(png.ok){ const grid=document.getElementById('pngGrid'); const entries=Object.entries(png.map||{}).slice(0,300); grid.innerHTML=entries.map(([name,url])=>`<div class="diag-card"><div style="display:flex;gap:8px;align-items:center"><img src="${url}" style="width:48px;height:48px;border-radius:8px"/><div><b>${name}</b><div class="muted" style="font-size:.8rem">${url[:60]}...</div></div></div></div>`).join(''); }
-  if(tms.ok){ const grid=document.getElementById('teamGrid'); const teams=(tms.teams||[]); grid.innerHTML=teams.map(t=>`<div class="diag-card"><b>${(t.name||t.team)}</b><div class="muted">${(t.members||[]).join(', ')}</div></div>`).join(''); }
+  if(png.ok){
+    const grid=document.getElementById('pngGrid');
+    const entries=Object.entries(png.map||{}).slice(0,200);
+    grid.innerHTML=entries.map(([name,url])=>`<div class="diag-card"><div style="display:flex;gap:8px;align-items:center"><img src="${url}" style="width:48px;height:48px;border-radius:8px"/><div><b>${name}</b><div class="muted" style="font-size:.8rem">${url.slice(0,60)}...</div></div></div></div>`).join('');
+  }
+  if(tms.ok){
+    const grid=document.getElementById('teamGrid');
+    const teams=(tms.teams||[]);
+    grid.innerHTML=teams.map(t=>`<div class="diag-card"><b>${(t.name||t.team)}</b><div class="muted">${(t.members||[]).join(', ')}</div></div>`).join('');
+  }
 })();
 </script>
 </body>
