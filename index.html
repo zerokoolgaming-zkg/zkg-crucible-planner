@@ -12,7 +12,7 @@
   <header class="hdr">
     <div class="brand">
       <img src="assets/zkg_badge.png" class="badge" alt="ZKG Emblem" />
-      <h1>ZKG Crucible Planner</h1>
+      <h1>ZKG CRUCIBLE COUNTER LIST</h1>
     </div>
     <div class="energy"></div>
     <div class="goldline"></div>
@@ -48,8 +48,50 @@
     <section class="card">
       <div class="resultsHeader">
         <h2>Results</h2>
-        <div class="subheader">Submit your Crucible Counters to my <a class="subLink" href="https://discord.gg/c23YXnUWb6" target="_blank" rel="noopener noreferrer">Discord Server</a></div>
-      </div>
+    <style>
+  .subheader {
+    font-size: 1.1em;
+    color: #ddd;
+    margin-top: 10px;
+  }
+
+  .subLink {
+    font-weight: bold;
+    color: #1e90ff;            /* Bright blue */
+    font-size: 1.5em;          /* Enlarged title */
+    text-decoration: none;
+    transition: all 0.3s ease-in-out;
+    animation: pulseGlow 2.5s infinite ease-in-out;
+  }
+
+  .subLink:hover {
+    color: #63b3ff;            /* Lighter blue on hover */
+    text-shadow: 0 0 10px #63b3ff;
+  }
+
+  @keyframes pulseGlow {
+    0% {
+      text-shadow: 0 0 4px #1e90ff, 0 0 8px #1e90ff;
+    }
+    50% {
+      text-shadow: 0 0 8px #3399ff, 0 0 16px #3399ff;
+    }
+    100% {
+      text-shadow: 0 0 4px #1e90ff, 0 0 8px #1e90ff;
+    }
+  }
+</style>
+
+<div class="subheader">
+  Submit your Crucible Counters to my 
+  <a class="subLink" 
+     href="https://discord.gg/c23YXnUWb6" 
+     target="_blank" 
+     rel="noopener noreferrer">
+    Discord Server
+  </a>
+</div>
+
       <div id="results" class="results muted">Choose exactly 5 characters to search.</div>
     </section>
 
