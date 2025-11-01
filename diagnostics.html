@@ -1,4 +1,63 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/><title>Diagnostics • ZKG</title><link rel="icon" href="assets/logo.png"/><link rel="stylesheet" href="style.css"/><style>.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px}.diag-card{background:#0c1d40;border:1px solid #2a3a66;border-radius:12px;padding:10px}.ok{color:#9fe39f}.bad{color:#ff8b8b}</style></head><body>
-<header class="msf-header"><div class="header-inner"><div class="brand"><img class="logo" src="assets/logo.png"/><h1>Diagnostics</h1></div></div><div class="energy-bg"></div><div class="gold-underline"></div></header>
-<main class="container ultra-wide"><section class="card"><h2>Live API Checks</h2><div id="summary" class="muted">Loading…</div></section><section class="card"><h2>PNG Map</h2><div id="pngGrid" class="grid"></div></section><section class="card"><h2>Teams</h2><div id="teamGrid" class="grid"></div></section></main>
-<script>const API_URL="https://script.google.com/macros/s/AKfycbwgqUa14K4cMZVDP7qxg6rqDs17vGKSiWCVJOavIA-D0oC6o2SkhvqwJHuJ4oZdqtE/exec";(async function(){const ping=await fetch(API_URL+'?action=ping').then(r=>r.json()).catch(()=>({ok:false}));const png=await fetch(API_URL+'?action=getpngmap').then(r=>r.json()).catch(()=>({ok:false}));const tms=await fetch(API_URL+'?action=getteams').then(r=>r.json()).catch(()=>({ok:false}));const s=document.getElementById('summary');s.innerHTML='Ping: '+(ping.ok?'<b class="ok">OK</b>':'<b class="bad">FAIL</b>')+' • PNGs: '+(png.ok?'<b class="ok">OK</b>':'<b class="bad">FAIL</b>')+' • Teams: '+(tms.ok?'<b class="ok">OK</b>':'<b class="bad">FAIL</b>');if(png.ok){const grid=document.getElementById('pngGrid');const entries=Object.entries(png.map||{}).slice(0,200);grid.innerHTML=entries.map(([name,url])=>`<div class="diag-card"><div style="display:flex;gap:8px;align-items:center"><img src="${url}" style="width:48px;height:48px;border-radius:8px"/><div><b>${name}</b><div class="muted" style="font-size:.8rem">${url} </div></div></div></div>`).join('');}if(tms.ok){const grid=document.getElementById('teamGrid');const teams=(tms.teams||[]);grid.innerHTML=teams.map(t=>`<div class="diag-card"><b>${(t.name||t.team)}</b><div class="muted">${(t.members||[]).join(', ')}</div></div>`).join('');}})();</script></body></html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Diagnostics • ZKG</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body class="diag">
+  <header class="hdr">
+    <div class="brand">
+      <img src="assets/zkg_badge.png" class="badge" alt="ZKG Emblem" />
+      <h1>Diagnostics</h1>
+    </div>
+    <div class="energy"></div>
+    <div class="goldline"></div>
+  </header>
+
+  <main class="container">
+    <section class="card">
+      <h2>Live API Checks</h2>
+      <div id="diagSummary" class="muted">Running…</div>
+      <ul id="diagList" class="diaglist"></ul>
+    </section>
+  </main>
+
+  <script>
+    const backend_url = "https://script.google.com/macros/s/AKfycbweQfrrV7MW5Z49MxYWe6nQ25Y5whGe_VHXZ6-gkR8x/dev";
+
+    async function probe(action) {
+      const t0 = performance.now();
+      try {
+        const r = await fetch(`${backend_url}?action=${action}&_=${Date.now()}`);
+        const j = await r.json();
+        const ms = Math.round(performance.now() - t0);
+        return { ok: !!(j && j.ok), ms, status: r.status, msg: j && (j.msg || j.error || '') };
+      } catch(e) {
+        return { ok:false, ms: Math.round(performance.now()-t0), status:'ERR', msg: e.message };
+      }
+    }
+
+    async function run() {
+      const items = [
+        {label:'Ping', a:'ping'},
+        {label:'PNGs', a:'getPngMap'},
+        {label:'Teams', a:'getTeams'},
+        {label:'Characters', a:'getCharacters'}
+      ];
+      const res = await Promise.all(items.map(x => probe(x.a)));
+      const list = document.getElementById('diagList'); list.innerHTML = '';
+      res.forEach((r,i) => {
+        const li = document.createElement('li');
+        li.className = r.ok ? 'ok' : 'bad';
+        li.textContent = `${items[i].label}: ${r.ok ? 'OK' : 'FAIL'} (${r.ms}ms)`;
+        if(!r.ok) li.title = (r.status + ' ' + (r.msg||''));
+        list.appendChild(li);
+      });
+      document.getElementById('diagSummary').textContent = 'Completed at ' + new Date().toLocaleTimeString();
+    }
+    run(); setInterval(run, 30000);
+  </script>
+</body>
+</html>
