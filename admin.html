@@ -18,24 +18,19 @@
   <div class="gold-underline"></div>
 </header>
 
-<main class="container">
+<main class="container ultra-wide">
   <section class="card">
     <h2>Login</h2>
-    <div id="characterRow">
-      <div class="dropdown-block">
-        <label>Password</label>
-        <input id="pwd" type="password" class="textlike" placeholder="Enter password" style="width:180px;padding:10px;border-radius:10px;border:1px solid #2a3a66;background:#0e1a33;color:#eaf0ff"/>
-      </div>
-      <div class="dropdown-block" style="align-self:end">
-        <button id="loginBtn" class="btn primary">Login</button>
-      </div>
+    <div class="actions right" style="gap:12px">
+      <input id="pwd" type="password" placeholder="Enter password" style="width:220px;padding:10px;border-radius:10px;border:1px solid #2a3a66;background:#0e1a33;color:#eaf0ff"/>
+      <button id="loginBtn" class="btn primary">Login</button>
     </div>
     <div id="loginMsg" class="muted" style="margin-top:8px"></div>
   </section>
 
   <section id="panel" class="card" style="display:none">
     <h2>Admin Panel</h2>
-    <div class="actions">
+    <div class="actions right">
       <button id="refreshBtn" class="btn">🌀 Refresh Data Cache</button>
       <a class="btn" target="_blank" rel="noreferrer" href="diagnostics.html">Open Diagnostics</a>
     </div>
