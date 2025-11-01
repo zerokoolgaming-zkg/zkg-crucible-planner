@@ -1,21 +1,20 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Diagnostics • ZKG</title>
-  <link rel="stylesheet" href="style.css" />
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Diagnostics • ZKG Planner</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body class="diag">
   <header class="hdr">
     <div class="brand">
-      <img src="assets/zkg_badge.png" class="badge" alt="ZKG Emblem" />
+      <img src="assets/zkg_badge.png" class="badge" alt="ZKG Emblem">
       <h1>Diagnostics</h1>
     </div>
     <div class="energy"></div>
     <div class="goldline"></div>
   </header>
-
   <main class="container">
     <section class="card">
       <h2>Live API Checks</h2>
@@ -23,41 +22,20 @@
       <ul id="diagList" class="diaglist"></ul>
     </section>
   </main>
-
   <script>
     const backend_url = "https://script.google.com/macros/s/AKfycbweQfrrV7MW5Z49MxYWe6nQ25Y5whGe_VHXZ6-gkR8x/dev";
-
-    async function probe(action) {
-      const t0 = performance.now();
-      try {
-        const r = await fetch(`${backend_url}?action=${action}&_=${Date.now()}`);
-        const j = await r.json();
-        const ms = Math.round(performance.now() - t0);
-        return { ok: !!(j && j.ok), ms, status: r.status, msg: j && (j.msg || j.error || '') };
-      } catch(e) {
-        return { ok:false, ms: Math.round(performance.now()-t0), status:'ERR', msg: e.message };
-      }
+    async function probe(action, qs="") { const t0=performance.now(); try { 
+      const r = await fetch(`${backend_url}?action=${action}${qs}&_=${Date.now()}`);
+      const j = await r.json(); return { ok: !!(j && j.ok), ms: Math.round(performance.now() - t0), detail: j };
+    } catch(e) { return { ok:false, ms: Math.round(performance.now()-t0), detail: e.message }; } }
+    async function run(){ 
+      const items=[['Ping','ping',''],['PNGs','getPNGs',''],['Teams','getTeams',''],['Characters','getCharacters','']];
+      const res=await Promise.all(items.map(([lbl,a,qs])=>probe(a,qs)));
+      const ul=document.getElementById('diagList'); ul.innerHTML='';
+      res.forEach((r,i)=>{ const li=document.createElement('li'); li.className=r.ok?'ok':'bad'; li.textContent=`${items[i][0]}: ${r.ok?'OK':'FAIL'} (${r.ms}ms)`; ul.appendChild(li); });
+      document.getElementById('diagSummary').textContent='Completed at '+new Date().toLocaleTimeString();
     }
-
-    async function run() {
-      const items = [
-        {label:'Ping', a:'ping'},
-        {label:'PNGs', a:'getPngMap'},
-        {label:'Teams', a:'getTeams'},
-        {label:'Characters', a:'getCharacters'}
-      ];
-      const res = await Promise.all(items.map(x => probe(x.a)));
-      const list = document.getElementById('diagList'); list.innerHTML = '';
-      res.forEach((r,i) => {
-        const li = document.createElement('li');
-        li.className = r.ok ? 'ok' : 'bad';
-        li.textContent = `${items[i].label}: ${r.ok ? 'OK' : 'FAIL'} (${r.ms}ms)`;
-        if(!r.ok) li.title = (r.status + ' ' + (r.msg||''));
-        list.appendChild(li);
-      });
-      document.getElementById('diagSummary').textContent = 'Completed at ' + new Date().toLocaleTimeString();
-    }
-    run(); setInterval(run, 30000);
+    run(); setInterval(run,30000);
   </script>
 </body>
 </html>
