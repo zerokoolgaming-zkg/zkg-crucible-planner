@@ -45,10 +45,7 @@ function setResultsLoading(on){
   const root = el('results');
   if(on){
     root.classList.remove('muted');
-    root.innerHTML = `<div class="loadingMsg" id="searchingMsg">🔍 Searching...</div>`;
-  } else {
-    const msg = el('searchingMsg');
-    if (msg) msg.remove();
+    root.innerHTML = `<div class="loadingMsg">Searching counters…</div>`;
   }
 }
 
@@ -104,20 +101,8 @@ function renderResults(payload){
 async function findCounters(preset){
   const M = preset || membersSelected();
   if(M.length !== 5){ return; }
-
-  // Show "Searching..." message
-  setResultsLoading(true);
-
-  try {
-    const payload = await api('findCounters', { members: encodeURIComponent(M.join('|')) });
-    renderResults(payload);
-  } catch (err) {
-    console.error(err);
-    showError("Error searching counters.");
-  } finally {
-    // Remove "Searching..." message when finished
-    setResultsLoading(false);
-  }
+  const payload = await api('findCounters', { members: encodeURIComponent(M.join('|')) });
+  renderResults(payload);
 }
 
 async function init(){
