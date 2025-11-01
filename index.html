@@ -1,1 +1,84 @@
-<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>ZKG Crucible Plannerx11</title><link rel="icon" href="favicon.ico"><link rel="stylesheet" href="style.css"></head><body><header class="msf-header"><div class="header-inner"><img src="logo.png" class="logo" alt="ZKG"><nav><a href="admin.html" class="nav-link">Admin</a></nav></div><div class="gold-underline"></div></header><main class="container"><section class="card"><h2>Select Team & Characters</h2><div class="selectors"><div class="slot"><label>Team</label><select id="teamSelect"><option value="">(Optional) Choose a Team</option></select></div><div class="slot"><label>Team Member 1</label><select class="charSelect"></select><div class="preview"><img></div></div><div class="slot"><label>Team Member 2</label><select class="charSelect"></select><div class="preview"><img></div></div><div class="slot"><label>Team Member 3</label><select class="charSelect"></select><div class="preview"><img></div></div><div class="slot"><label>Team Member 4</label><select class="charSelect"></select><div class="preview"><img></div></div><div class="slot"><label>Team Member 5</label><select class="charSelect"></select><div class="preview"><img></div></div></div><div class="actions"><button id="searchBtn" class="primary">Find Counters</button><button id="resetBtn" class="ghost">Reset</button></div></section><section class="card"><h2>Results</h2><div id="result" class="results"></div></section></main><script src="app.js"></script></body></html>
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>ZKG Crucible Planner</title>
+  <link rel="icon" href="assets/logo.png" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header class="msf-header">
+    <div class="header-inner">
+      <img class="logo" src="assets/logo.png" alt="ZKG Emblem" />
+      <h1>ZKG Crucible PlannerXXXXXXXX2</h1>
+      <nav>
+        <a class="nav-link" href="admin.html">Admin</a>
+        <a class="nav-link" href="diagnostics.html">Diagnostics</a>
+      </nav>
+    </div>
+    <div class="energy-bg"></div>
+    <div class="gold-underline"></div>
+  </header>
+
+  <main class="container">
+    <section class="card">
+      <h2>Select Team & Characters</h2>
+
+      <div id="characterRow">
+        <div class="dropdown-block">
+          <label>Team</label>
+          <select id="teamSelect"><option>Loading…</option></select>
+        </div>
+
+        <div class="dropdown-block">
+          <label>Team Member 1</label>
+          <select class="charSelect"></select>
+          <div class="preview"><img alt="" /><div class="missing-ph">?</div></div>
+        </div>
+
+        <div class="dropdown-block">
+          <label>Team Member 2</label>
+          <select class="charSelect"></select>
+          <div class="preview"><img alt="" /><div class="missing-ph">?</div></div>
+        </div>
+
+        <div class="dropdown-block">
+          <label>Team Member 3</label>
+          <select class="charSelect"></select>
+          <div class="preview"><img alt="" /><div class="missing-ph">?</div></div>
+        </div>
+
+        <div class="dropdown-block">
+          <label>Team Member 4</label>
+          <select class="charSelect"></select>
+          <div class="preview"><img alt="" /><div class="missing-ph">?</div></div>
+        </div>
+
+        <div class="dropdown-block">
+          <label>Team Member 5</label>
+          <select class="charSelect"></select>
+          <div class="preview"><img alt="" /><div class="missing-ph">?</div></div>
+        </div>
+      </div>
+
+      <div class="actions">
+        <button id="searchBtn" class="btn primary">Find Counters</button>
+        <button id="resetBtn" class="btn">Reset</button>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>Results</h2>
+      <div id="result" class="result-area muted">Choose exactly 5 characters to search.</div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <p>© ZKG • MSF-themed utility • <a href="https://marvelstrikeforce.com/en/characters" target="_blank" rel="noreferrer">Character Source</a></p>
+  </footer>
+
+  <script>window.API_URL="https://script.google.com/macros/s/AKfycbwgqUa14K4cMZVDP7qxg6rqDs17vGKSiWCVJOavIA-D0oC6o2SkhvqwJHuJ4oZdqtE/exec";</script>
+  <script src="script.js"></script>
+</body>
+</html>
