@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ZKG Crucible Planner</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="hdr">
+    <div class="brand">
+      <img src="assets/zkg_badge.png" class="badge" alt="ZKG Emblem">
+      <h1>ZKG Crucible Planner</h1>
+    </div>
+    <div class="energy"></div>
+    <div class="goldline"></div>
+  </header>
+
+  <main class="container">
+    <a class="hiddenAdmin" href="diagnostics.html" aria-label="Admin diagnostics"></a>
+
+    <div id="errorBox" class="error" style="display:none"></div>
+    <div id="loadingSpinner" class="loading"><div class="spinner"></div><span>Loading data…</span></div>
+
+    <section class="card">
+      <h2>Select Team & Characters</h2>
+      <div class="row6">
+        <div class="slot">
+          <label>Team (optional)</label>
+          <select id="teamSelect"><option>Loading…</option></select>
+          <div class="portrait ph"></div>
+        </div>
+        <div class="slot"><label>Team Member 1</label><select id="char1" class="char-select"></select><div class="portrait"><img id="charImg1" alt=""></div></div>
+        <div class="slot"><label>Team Member 2</label><select id="char2" class="char-select"></select><div class="portrait"><img id="charImg2" alt=""></div></div>
+        <div class="slot"><label>Team Member 3</label><select id="char3" class="char-select"></select><div class="portrait"><img id="charImg3" alt=""></div></div>
+        <div class="slot"><label>Team Member 4</label><select id="char4" class="char-select"></select><div class="portrait"><img id="charImg4" alt=""></div></div>
+        <div class="slot"><label>Team Member 5</label><select id="char5" class="char-select"></select><div class="portrait"><img id="charImg5" alt=""></div></div>
+      </div>
+      <div class="actions">
+        <button id="resetBtn" class="btn">Reset</button>
+        <span class="muted small">Counters auto-run when 5 members are selected.</span>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>Results</h2>
+      <div id="results" class="results muted">Choose exactly 5 characters to search.</div>
+    </section>
+
+    <p class="muted small">Diagnostics: <a href="diagnostics.html">/diagnostics.html</a></p>
+  </main>
+
+  <footer class="ftr muted small">© ZKG • Unofficial MSF utility.</footer>
+
+  <script>
+    const backend_url = "https://script.google.com/macros/s/AKfycbz9IjPZ-hotdxXl6DjEkVqA1phfPLLgs4DsjBTrbRaaqqN2Jp8_lo2Uu7V1XJhvexR9Zg/exec";
+    const PORTRAIT_BASE = "https://zerokoolgaming-zkg.github.io/zkg-crucible-planner/png/";
+  </script>
+  <script src="script.js"></script>
+</body>
+</html>
