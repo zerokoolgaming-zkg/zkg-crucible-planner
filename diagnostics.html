@@ -23,12 +23,12 @@
     </section>
   </main>
   <script>
-    const backend_url = "https://script.google.com/macros/s/AKfycbweQfrrV7MW5Z49MxYWe6nQ25Y5whGe_VHXZ6-gkR8x/dev";
-    async function probe(action, qs="") { const t0=performance.now(); try { 
+    const backend_url = "YOUR_EXEC_URL_HERE";
+    async function probe(action, qs="") { const t0=performance.now(); try {
       const r = await fetch(`${backend_url}?action=${action}${qs}&_=${Date.now()}`);
-      const j = await r.json(); return { ok: !!(j && j.ok), ms: Math.round(performance.now() - t0), detail: j };
+      const j = await r.json(); return { ok: !!(j && j.ok), ms: Math.round(performance.now()-t0), detail:j };
     } catch(e) { return { ok:false, ms: Math.round(performance.now()-t0), detail: e.message }; } }
-    async function run(){ 
+    async function run(){
       const items=[['Ping','ping',''],['PNGs','getPNGs',''],['Teams','getTeams',''],['Characters','getCharacters','']];
       const res=await Promise.all(items.map(([lbl,a,qs])=>probe(a,qs)));
       const ul=document.getElementById('diagList'); ul.innerHTML='';

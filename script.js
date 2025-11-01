@@ -1,8 +1,4 @@
-// ---- CONFIG ----
-const backend_url = "https://script.google.com/macros/s/AKfycbweQfrrV7MW5Z49MxYWe6nQ25Y5whGe_VHXZ6-gkR8x/exec"; // Replace with your /exec URL
-
-
-/* ZKG v3 — Local PNGs + Team Autofill + Result Labels */
+/* ZKG Planner v4.2 - floating donate, discord link, back-to-top, energy bg */
 let PNG_MAP = {}, CHARACTERS = [], TEAMS = [];
 
 const el = id => document.getElementById(id);
@@ -24,24 +20,41 @@ function optionsFrom(list, placeholder){
 }
 function escapeHtml(s){return (s==null?'':String(s)).replace(/[&<>\"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));}
 
-function updatePortrait(i){
-  const name = val(`char${i}`);
+function setPortrait(imgEl, name){
   const file = PNG_MAP[(name||"").toLowerCase()] || "";
-  const img = el(`charImg${i}`);
-  img.src = file ? ("assets/portraits/" + file) : "assets/question.png";
-  img.alt = name || "portrait";
+  imgEl.src = file ? (PORTRAIT_BASE + file) : "assets/question.png";
+  imgEl.alt = name || "portrait";
+  imgEl.onerror = () => { imgEl.onerror = null; imgEl.src = "assets/question.png"; };
 }
+function updatePortrait(i){ setPortrait(el(`charImg${i}`), val(`char${i}`)); }
 
 function resetUI(){
   el('teamSelect').selectedIndex = 0;
   for(let i=1;i<=5;i++){ el(`char${i}`).selectedIndex = 0; updatePortrait(i); }
   const res = el('results'); res.classList.add('muted'); res.innerHTML = "Choose exactly 5 characters to search.";
+  hide('teamLoadingMsg');
 }
 
 function membersSelected(){
   const m = [];
   for(let i=1;i<=5;i++){ const n = val(`char${i}`); if(n) m.push(n); }
   return m;
+}
+
+function setResultsLoading(on){
+  const root = el('results');
+  if(on){
+    root.classList.remove('muted');
+    root.innerHTML = `<div class="loadingMsg">Searching counters…</div>`;
+  }
+}
+
+function maybeAutoSearch(){
+  const M = membersSelected();
+  if (M.length === 5) {
+    setResultsLoading(true);
+    findCounters(M);
+  }
 }
 
 function renderResults(payload){
@@ -59,64 +72,101 @@ function renderResults(payload){
       const div = document.createElement('div');
       div.className = 'resultCard';
       const file = PNG_MAP[(name||"").toLowerCase()] || "";
-      const src = file ? ("assets/portraits/" + file) : "assets/question.png";
+      const src = file ? (PORTRAIT_BASE + file) : "assets/question.png";
       div.innerHTML = `<div class="nameTag">${escapeHtml(name||"")}</div>
-                       <img src="${src}" alt="${escapeHtml(name||'portrait')}" width="108" height="108">`;
+                       <img src="${src}" alt="${escapeHtml(name||'portrait')}" width="108" height="108" onerror="this.src='assets/question.png'">`;
       grid.appendChild(div);
     });
     const meta = document.createElement('div');
     meta.className = 'meta';
-    const extras = (r.extras || []).filter(Boolean).join(' • ');
+    const extras = (r.extras || []).filter(Boolean);
     meta.textContent = [
       r.room ? `Room: ${r.room}` : "",
       r.type ? `Type: ${r.type}` : "",
-      r.tcpDiff ? `TCP Diff: ${r.tcpDiff}` : "",
-      extras
+      r.tcpDiff ? `TCP Diff: ${r.tcpDiff}` : ""
     ].filter(Boolean).join('  |  ');
+
+    const extrasDiv = document.createElement('div');
+    extrasDiv.className = 'extras';
+    if (extras.length) extrasDiv.textContent = extras.join('\n');
+
     root.appendChild(document.createElement('hr'));
     const title = document.createElement('div'); title.className='nameTag'; title.style.margin='6px 0'; title.textContent = `Match #${idx+1}`; root.appendChild(title);
     root.appendChild(grid);
     if (meta.textContent) root.appendChild(meta);
+    if (extras.length) root.appendChild(extrasDiv);
   });
 }
 
+async function findCounters(preset){
+  const M = preset || membersSelected();
+  if(M.length !== 5){ return; }
+  const payload = await api('findCounters', { members: encodeURIComponent(M.join('|')) });
+  renderResults(payload);
+}
+
 async function init(){
+  // back-to-top visibility
+  const btt = el('backToTop');
+  window.addEventListener('scroll', ()=>{
+    if (window.scrollY > 300) btt.style.display = 'block'; else btt.style.display = 'none';
+  });
+  btt.addEventListener('click', ()=>window.scrollTo({top:0, behavior:'smooth'}));
+
   show('loadingSpinner','flex'); clearError();
   try {
-    const [pngs, teams, chars] = await Promise.all([
-      api('getPNGs'),
-      api('getTeams'),
-      api('getCharacters')
+    const [ping, pngs, teams, chars] = await Promise.all([
+      api('ping'), api('getPNGs'), api('getTeams'), api('getCharacters')
     ]);
-    if(!pngs.ok || !teams.ok || !chars.ok) throw new Error("Backend not OK");
-    PNG_MAP = pngs.map || {};
-    CHARACTERS = chars.characters || [];
+    if(!ping.ok) throw new Error("Backend ping failed");
+    if(!pngs.ok || !teams.ok || !chars.ok) throw new Error("Data calls not OK");
+
+    if (pngs.map) {
+      PNG_MAP = pngs.map;
+    } else if (Array.isArray(pngs.pngs)) {
+      PNG_MAP = {};
+      pngs.pngs.forEach(({name,file}) => { if (name && file) PNG_MAP[String(name).toLowerCase()] = String(file); });
+    } else {
+      PNG_MAP = {};
+    }
+
+    CHARACTERS = chars.characters || chars.chars || [];
     TEAMS = teams.teams || [];
+
     el('teamSelect').innerHTML = optionsFrom(TEAMS, '(Optional) Choose a Team');
     const charOpts = optionsFrom(CHARACTERS, 'Choose character');
-    for(let i=1;i<=5;i++){ el(`char${i}`).innerHTML = charOpts; el(`char${i}`).addEventListener('change', ()=>updatePortrait(i)); updatePortrait(i); }
+    for(let i=1;i<=5;i++){
+      el(`char${i}`).innerHTML = charOpts;
+      el(`char${i}`).addEventListener('change', ()=>{ updatePortrait(i); setResultsLoading(true); maybeAutoSearch(); });
+      updatePortrait(i);
+    }
+
     el('teamSelect').addEventListener('change', async ()=>{
       const team = val('teamSelect');
       if(!team){ return; }
-      const info = await api('getTeamMembers', { team });
-      if(info.ok && info.members){
-        info.members.forEach((name,idx) => {
-          const sel = el(`char${idx+1}`);
-          if (!name) return;
-          let i = Array.from(sel.options).findIndex(o => o.value.toLowerCase() === name.toLowerCase());
-          if (i < 0) { sel.insertAdjacentHTML('beforeend', `<option>${escapeHtml(name)}</option>`); i = Array.from(sel.options).length-1; }
-          sel.selectedIndex = i;
-          updatePortrait(idx+1);
-        });
+      const tmsg = el('teamLoadingMsg');
+      tmsg.textContent = 'Loading team…';
+      show('teamLoadingMsg');
+      try{
+        const info = await api('getTeamMembers', { team });
+        if(info.ok && info.members){
+          info.members.forEach((name,idx) => {
+            const sel = el(`char${idx+1}`);
+            if (!name) return;
+            let i = Array.from(sel.options).findIndex(o => o.value.toLowerCase() === String(name).toLowerCase());
+            if (i < 0) { sel.insertAdjacentHTML('beforeend', `<option>${escapeHtml(name)}</option>`); i = Array.from(sel.options).length-1; }
+            sel.selectedIndex = i;
+            updatePortrait(idx+1);
+          });
+          setResultsLoading(true);
+          maybeAutoSearch();
+        }
+      } finally {
+        hide('teamLoadingMsg');
       }
     });
+
     el('resetBtn').addEventListener('click', resetUI);
-    el('findCounters').addEventListener('click', async ()=>{
-      const M = membersSelected();
-      if(M.length !== 5){ renderResults({ok:false, error:"Please select exactly 5 members."}); return; }
-      const payload = await api('findCounters', { members: encodeURIComponent(M.join('|')) });
-      renderResults(payload);
-    });
   } catch(e) {
     console.error(e);
     showError('Failed to load data.');
