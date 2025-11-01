@@ -1,16 +1,18 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>ZKG Crucible PlannerCCCCDDDDSSS</title>
-  <link rel="stylesheet" href="style.css">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>ZKG Crucible COUNTER LIST</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
+  <a class="donateBtn" href="https://streamelements.com/zerokoolgamer-4649/tip" target="_blank" rel="noopener noreferrer">DONATE TO ZKG</a>
+
   <header class="hdr">
     <div class="brand">
-      <img src="assets/zkg_badge.png" class="badge" alt="ZKG Emblem">
-      <h1>ZKG Crucible PlannerXXXXXXX</h1>
+      <img src="assets/zkg_badge.png" class="badge" alt="ZKG Emblem" />
+      <h1>ZKG - Crucible Counter Search</h1>
     </div>
     <div class="energy"></div>
     <div class="goldline"></div>
@@ -29,6 +31,7 @@
           <label>Team (optional)</label>
           <select id="teamSelect"><option>Loading…</option></select>
           <div class="portrait ph"></div>
+          <div id="teamLoadingMsg" class="loadingMsg" style="display:none"></div>
         </div>
         <div class="slot"><label>Team Member 1</label><select id="char1" class="char-select"></select><div class="portrait"><img id="charImg1" alt=""></div></div>
         <div class="slot"><label>Team Member 2</label><select id="char2" class="char-select"></select><div class="portrait"><img id="charImg2" alt=""></div></div>
@@ -43,17 +46,22 @@
     </section>
 
     <section class="card">
-      <h2>Results</h2>
+      <div class="resultsHeader">
+        <h2>Results</h2>
+        <div class="subheader">Submit your Crucible Counters to my <a class="subLink" href="https://discord.gg/c23YXnUWb6" target="_blank" rel="noopener noreferrer">Discord Server</a></div>
+      </div>
       <div id="results" class="results muted">Choose exactly 5 characters to search.</div>
     </section>
 
     <p class="muted small">Diagnostics: <a href="diagnostics.html">/diagnostics.html</a></p>
   </main>
 
+  <button id="backToTop" class="backTop" aria-label="Back to top" title="Back to top">↑</button>
+
   <footer class="ftr muted small">© ZKG • Unofficial MSF utility.</footer>
 
   <script>
-    const backend_url = "https://script.google.com/macros/s/AKfycbz3qxZwZ-FoSjojHKjZbtxV0G9a6Y-pk7miXKxM3VrMjG9UCjYzu49ZAkngNCJ75nUMqg/exec";
+    const backend_url = "https://script.google.com/macros/s/AKfycbwya1MwauKzXMm79t31Ebq42tPtAn7NA-gug4tl89rXP8MC3lNcRH7xPHm9ug_pfofs5g/exec";
     const PORTRAIT_BASE = "https://zerokoolgaming-zkg.github.io/zkg-crucible-planner/png/";
   </script>
   <script src="script.js"></script>
