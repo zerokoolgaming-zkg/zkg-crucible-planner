@@ -3,25 +3,30 @@
 <head>
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
-  <title>ZKG Crucible Planner</title>
+  <title>ZKG CRUCIBLE COUNTER LIST</title>
   <link rel="icon" href="assets/img/logo.png"/>
-  <link rel="stylesheet" href="assets/css/style.css"/>
+  <link rel="stylesheet" href="style.css"/>
 </head>
 <body>
 <header class="msf-header">
-  <div class="header-inner">
-    <div class="brand">
-      <img class="logo" src="assets/img/logo.png" alt="ZKG Emblem"/>
-      <h1>ZKG Crucible Planner</h1>
-    </div>
+  <a class="brand" href="./" aria-label="ZKG Planner Home">
+    <img class="logo" src="assets/img/logo.png" alt="ZKG Emblem"/>
+    <h1>ZKG Crucible Planner</h1>
+  </a>
+  <div class="live-indicator" title="Backend connection status">
+    <span id="liveDot" class="dot red"></span>
+    <span id="liveText">Offline</span>
   </div>
   <div class="energy-bg"></div>
   <div class="gold-underline"></div>
 </header>
 
 <main class="container ultra-wide">
-  <div id="banner" class="banner hidden">⚠️ Failed to load data. <button id="retryBtn" class="btn small">Retry</button></div>
-  <div id="spinner" class="spinner-wrap"><div class="spinner"></div><div class="spin-text">Loading data…</div></div>
+  <div id="banner" class="banner hidden">⚠️ Failed to load data from backend. <button id="retryBtn" class="btn small">Retry</button></div>
+  <div id="spinner" class="spinner-wrap">
+    <img src="assets/icons/spinner.svg" class="svgspin" alt="Loading"/>
+    <div class="spin-text">Loading data…</div>
+  </div>
 
   <section class="card">
     <h2>Select Team & Characters</h2>
@@ -70,14 +75,15 @@
     <div id="result" class="result-area muted">Choose exactly 5 characters to search.</div>
   </section>
 
-  <p class="muted" style="text-align:center;margin-top:10px;font-size:.9rem">
-    Diagnostics available at <code>/diagnostics.html</code>
-  </p>
+  <p class="muted footnote">Admin diagnostics available at <code>/diagnostics.html</code></p>
 </main>
 
 <footer class="footer"><p>© ZKG • Unofficial MSF utility.</p></footer>
 
-<script>window.BACKEND_URL="https://script.google.com/macros/s/AKfycbwgqUa14K4cMZVDP7qxg6rqDs17vGKSiWCVJOavIA-D0oC6o2SkhvqwJHuJ4oZdqtE/exec";</script>
-<script src="assets/js/app.js"></script>
+<script>
+  window.BACKEND_URL = "https://script.google.com/macros/s/AKfycbweQfrrV7MW5Z49MxYWe6nQ25Y5whGe_VHXZ6-gkR8x/exec";
+  window.LIVE_REPING_MS = 5 * 60 * 1000;
+</script>
+<script src="script.js"></script>
 </body>
 </html>

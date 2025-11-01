@@ -1,16 +1,17 @@
-ZKG Crucible Planner — v4.4 (Root Build)
+ZKG Crucible Planner — v4.5 (Root Build)
 
-All files go in your REPO ROOT (same folder as index.html).
+All files belong in your REPO ROOT (same level as index.html).
 
 Structure
 ---------
 index.html
 diagnostics.html   (PIN: 2479)
+style.css
+script.js          (uses your backend: https://script.google.com/macros/s/AKfycbweQfrrV7MW5Z49MxYWe6nQ25Y5whGe_VHXZ6-gkR8x/exec)
 assets/
-  css/style.css
-  js/app.js        (uses your backend: https://script.google.com/macros/s/AKfycbwgqUa14K4cMZVDP7qxg6rqDs17vGKSiWCVJOavIA-D0oC6o2SkhvqwJHuJ4oZdqtE/exec)
   img/logo.png
   img/energy-bg.png
+  icons/spinner.svg
 
 Deploy
 ------
@@ -22,4 +23,4 @@ Deploy
 Notes
 -----
 - If Apps Script is down, a small static fallback keeps dropdowns usable.
-- If you redeploy Apps Script, its /exec URL may change; update BACKEND_URL in assets/js/app.js.
+- If you redeploy Apps Script, its /exec URL may change; update BACKEND_URL in script.js.
