@@ -40,3 +40,59 @@ a{color:var(--accent)}
 
 .result-area{min-height:40px}.muted{color:var(--muted)}
 .footer{color:var(--muted);text-align:center;padding:20px 12px}
+
+/* === PULSING SEARCH MESSAGE === */
+.searching {
+  color: #6ec6ff;            /* light blue text */
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  animation: pulseSearch 1.5s ease-in-out infinite;
+  text-align: center;
+  transition: opacity 0.3s ease;
+}
+
+@keyframes pulseSearch {
+  0%   { opacity: 0.3; }
+  50%  { opacity: 1; }
+  100% { opacity: 0.3; }
+}
+
+/* === OPTIONAL SUPPORT STYLES (SAFE TO KEEP) === */
+.muted {
+  color: #999;
+  font-style: italic;
+}
+
+#result {
+  margin-top: 16px;
+  min-height: 40px;
+  text-align: center;
+  transition: opacity 0.3s ease;
+}
+
+.match-card {
+  background: rgba(0,0,0,0.4);
+  border: 1px solid #666;
+  border-radius: 8px;
+  padding: 12px;
+  margin: 10px auto;
+  max-width: 860px;
+  color: #fff;
+  box-shadow: 0 0 10px rgba(0,0,0,0.5);
+  animation: fadeIn 0.5s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* === OPTIONAL “?” placeholder === */
+.missing-ph {
+  justify-content: center;
+  align-items: center;
+  background: rgba(255,255,255,0.05);
+  border: 1px dashed #777;
+  color: #aaa;
+  font-size: 20px;
+}
