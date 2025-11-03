@@ -1,178 +1,162 @@
-/* ZKG Planner v4.2 - floating donate, discord link, back-to-top, energy bg */
-let PNG_MAP = {}, CHARACTERS = [], TEAMS = [];
 
-const el = id => document.getElementById(id);
-const val = id => (el(id).value || "").trim();
-const hide = (id) => el(id).style.display = 'none';
-const show = (id, mode='block') => el(id).style.display = mode;
+/* ZKG v4.6A */
+const API_URL = window.API_URL;
 
-function showError(msg){ const e = el('errorBox'); e.textContent = msg; e.style.display='block'; hide('loadingSpinner'); }
-function clearError(){ const e = el('errorBox'); e.textContent=""; e.style.display='none'; }
+const teamSelect = document.getElementById("teamSelect");
+const seasonSelect = document.getElementById("seasonSelect");
+const roomSelect = document.getElementById("roomSelect");
+const charSelects = [...document.querySelectorAll(".charSelect")];
+const resultEl = document.getElementById("result");
+const resetBtn = document.getElementById("resetBtn");
 
-async function api(action, params={}){
-  const qs = new URLSearchParams({ action, ...params, _: Date.now() }).toString();
-  const r = await fetch(`${backend_url}?${qs}`);
-  return r.json();
+let characters = [], teams = [], pngMap = {};
+
+init();
+
+async function init(){
+  lock(true);
+  await loadAll();
+  await loadSeasonRoomData();
+  buildTeamDropdown();
+  buildCharacterDropdowns();
+  hookPreviewUpdates();
+  lock(false);
 }
 
-function optionsFrom(list, placeholder){
-  return `<option value="">${placeholder}</option>` + list.map(n => `<option>${escapeHtml(n)}</option>`).join('');
-}
-function escapeHtml(s){return (s==null?'':String(s)).replace(/[&<>\"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));}
+function lock(s){[...document.querySelectorAll("select,button")].forEach(el=>el.disabled=s);}
 
-function setPortrait(imgEl, name){
-  const file = PNG_MAP[(name||"").toLowerCase()] || "";
-  imgEl.src = file ? (PORTRAIT_BASE + file) : "assets/question.png";
-  imgEl.alt = name || "portrait";
-  imgEl.onerror = () => { imgEl.onerror = null; imgEl.src = "assets/question.png"; };
+async function loadAll(){
+  const [chars, tms, pngs] = await Promise.all([
+    fetch(`${API_URL}?action=getCharacters`).then(r=>r.json()).catch(()=>({ok:false})),
+    fetch(`${API_URL}?action=getTeams`).then(r=>r.json()).catch(()=>({ok:false})),
+    fetch(`${API_URL}?action=getPNGs`).then(r=>r.json()).catch(()=>({ok:false}))
+  ]);
+  if(chars.ok) characters = chars.characters||[];
+  if(tms.ok) teams = tms.teams||[];
+  if(pngs.ok) pngMap = pngs.map||{};
 }
-function updatePortrait(i){ setPortrait(el(`charImg${i}`), val(`char${i}`)); }
+
+async function loadSeasonRoomData(){
+  try{
+    const res = await fetch(`${API_URL}?action=getSeasonRoomData`);
+    const d = await res.json();
+    if(!d.ok) return;
+    seasonSelect.innerHTML = ['<option value=\"\">Choose Season</option>']
+      .concat((d.seasons||[]).map(s=>`<option value=\"${escapeHtml(s)}\">${escapeHtml(s)}</option>`)).join('');
+    roomSelect.innerHTML = ['<option value=\"\">Choose Room</option>']
+      .concat((d.rooms||[]).map(x=>`<option value=\"${escapeHtml(x)}\">${escapeHtml(x)}</option>`)).join('');
+  }catch(e){}
+}
+
+function buildTeamDropdown(){
+  teamSelect.innerHTML = `<option value=\"\">(Optional) Choose a Team</option>` +
+    teams.map(t=>`<option value=\"${escapeHtml(t)}\">${escapeHtml(t)}</option>`).join("");
+  teamSelect.addEventListener("change", async () => {
+    const val = teamSelect.value; if(!val) return;
+    try{
+      const r = await fetch(`${API_URL}?action=getTeamMembers&team=${encodeURIComponent(val)}`);
+      const d = await r.json();
+      if(d.ok){
+        (d.members||[]).slice(0,5).forEach((m,i)=>{
+          if(charSelects[i]){ charSelects[i].value = m; updatePreviewForSelect(charSelects[i]); }
+        });
+        maybeAutoSearch();
+      }
+    }catch(e){}
+  });
+}
+
+function buildCharacterDropdowns(){
+  const opts = `<option value=\"\">Choose character</option>` +
+    characters.map(n=>`<option value=\"${escapeHtml(n)}\">${escapeHtml(n)}</option>`).join("");
+  charSelects.forEach(sel=> sel.innerHTML = opts);
+}
+
+function hookPreviewUpdates(){
+  charSelects.forEach(sel => sel.addEventListener("change", ev => { updatePreviewForSelect(ev.target); maybeAutoSearch(); }));
+  seasonSelect.addEventListener('change', maybeAutoSearch);
+  roomSelect.addEventListener('change', maybeAutoSearch);
+  charSelects.forEach(sel => updatePreviewForSelect(sel));
+  resetBtn.addEventListener("click", resetUI);
+}
+
+function norm(s){
+  return (s||'').toLowerCase()
+    .replace(/_/g,' ')
+    .replace(/\u00A0/g,' ')
+    .replace(/[\\u200B-\\u200D\\uFEFF]/g,'')
+    .replace(/[’‘`]/g,\"'\")
+    .replace(/[(){}\\[\\].,;:!?/\\\\\\-–—\\\"“”‘’]/g,'')
+    .replace(/\\s+/g,' ')
+    .trim();
+}
+function imgFor(name){ return pngMap[norm(name)] || \"\"; }
+
+function updatePreviewForSelect(sel){
+  const col = sel.closest('.col');
+  const imgEl = col.querySelector('.preview img');
+  const ph = col.querySelector('.preview .missing-ph');
+  const url = imgFor(sel.value);
+  if(url){ imgEl.src = url; imgEl.style.display='block'; ph.style.display='none'; }
+  else { imgEl.removeAttribute('src'); imgEl.style.display='none'; ph.style.display='flex'; }
+}
 
 function resetUI(){
-  el('teamSelect').selectedIndex = 0;
-  for(let i=1;i<=5;i++){ el(`char${i}`).selectedIndex = 0; updatePortrait(i); }
-  const res = el('results'); res.classList.add('muted'); res.innerHTML = "Choose exactly 5 characters to search.";
-  hide('teamLoadingMsg');
-}
-
-function membersSelected(){
-  const m = [];
-  for(let i=1;i<=5;i++){ const n = val(`char${i}`); if(n) m.push(n); }
-  return m;
-}
-
-function setResultsLoading(on){
-  const root = el('results');
-  if(on){
-    root.classList.remove('muted');
-    root.innerHTML = `<div class="loadingMsg">Searching counters…</div>`;
-  }
+  teamSelect.value = seasonSelect.value = roomSelect.value = \"\";
+  charSelects.forEach(s=>{ s.selectedIndex=0; updatePreviewForSelect(s); });
+  resultEl.classList.add('muted'); resultEl.classList.remove('searching');
+  resultEl.textContent = \"Choose exactly 5 characters to search.\";
 }
 
 function maybeAutoSearch(){
-  const M = membersSelected();
-  if (M.length === 5) {
-    setResultsLoading(true);
-    findCounters(M);
+  const team = charSelects.map(s=>s.value).filter(Boolean);
+  if(team.length===5) onSearch();
+}
+
+async function onSearch(){
+  const members = charSelects.map(s=>s.value).filter(Boolean);
+  if(members.length!==5){
+    resultEl.classList.add('muted'); resultEl.textContent = \"Please select exactly 5 characters.\"; return;
+  }
+  resultEl.classList.remove('muted'); resultEl.classList.add('searching'); resultEl.textContent = \"Searching...\";
+
+  const qs = new URLSearchParams({
+    action:'findCounters',
+    members: encodeURIComponent(members.join('|')),
+    season: seasonSelect.value || '',
+    room: roomSelect.value || ''
+  });
+  try{
+    const r = await fetch(`${API_URL}?${qs.toString()}`);
+    const d = await r.json();
+    resultEl.classList.remove('searching');
+    if(!d.ok || !d.results || !d.results.length){
+      resultEl.classList.add('muted'); resultEl.textContent = \"No 5-character team match found.\"; return;
+    }
+    resultEl.innerHTML = d.results.map((m,i)=>{
+      const tiles = (m.counterTeam||[]).map(n=>{
+        const url = imgFor(n);
+        return `<div class=\"char-tile\"><div class=\"nm\">${escapeHtml(n)}</div>` +
+               (url?`<img src=\"${escapeHtml(url)}\"/>`:`<div class=\"missing-ph\">?</div>`) + `</div>`;
+      }).join('');
+      const punch = (m.meta && (m.meta.punchType||'')).toLowerCase();
+      const diffClass = punch.includes('down') ? 'tcp-down' : 'tcp-up';
+      const info = m.meta ? `<div class=\"counter-info\">
+        <span><strong>Season:</strong> ${escapeHtml(m.meta.season||'')}</span>
+        <span><strong>Room:</strong> ${escapeHtml(m.meta.room||'')}</span>
+        <span><strong>Type:</strong> ${escapeHtml(m.meta.punchType||'')}</span>
+        <span><strong>TCP Team:</strong> ${escapeHtml(m.meta.tcpTeam||'')}</span>
+        <span><strong>TCP Counter:</strong> ${escapeHtml(m.meta.tcpCounter||'')}</span>
+        <span><strong>TCP Diff:</strong> <span class=\"${diffClass}\">${escapeHtml(m.meta.tcpDiff||'')}</span></span>
+        <span><strong>Victory Points:</strong> ${escapeHtml(m.meta.victoryPoints||'')}</span>
+        <span><strong>Sac First With:</strong> ${escapeHtml(m.meta.sacFirstWith||'')}</span>
+      </div>` : '';
+      return `<div class=\"match-card\"><h3>Match #${i+1}</h3><div class=\"characterRow\">${tiles}</div>${info}</div>`;
+    }).join('');
+  }catch(e){
+    resultEl.classList.remove('searching'); resultEl.classList.add('muted');
+    resultEl.textContent = \"Error: \"+e.message;
   }
 }
 
-function renderResults(payload){
-  const root = el('results');
-  if(!payload.ok){ root.classList.add('muted'); root.textContent = payload.error || "No match found."; return; }
-  const { results } = payload;
-  if(!results || !results.length){ root.classList.add('muted'); root.textContent = "No match found."; return; }
-
-  root.classList.remove('muted');
-  root.innerHTML = "";
-  results.slice(0,6).forEach((r,idx) => {
-    const grid = document.createElement('div');
-    grid.className = 'resultsGrid';
-    r.counterTeam.forEach(name => {
-      const div = document.createElement('div');
-      div.className = 'resultCard';
-      const file = PNG_MAP[(name||"").toLowerCase()] || "";
-      const src = file ? (PORTRAIT_BASE + file) : "assets/question.png";
-      div.innerHTML = `<div class="nameTag">${escapeHtml(name||"")}</div>
-                       <img src="${src}" alt="${escapeHtml(name||'portrait')}" width="108" height="108" onerror="this.src='assets/question.png'">`;
-      grid.appendChild(div);
-    });
-    const meta = document.createElement('div');
-    meta.className = 'meta';
-    const extras = (r.extras || []).filter(Boolean);
-    meta.textContent = [
-      r.room ? `Room: ${r.room}` : "",
-      r.type ? `Type: ${r.type}` : "",
-      r.tcpDiff ? `TCP Diff: ${r.tcpDiff}` : ""
-    ].filter(Boolean).join('  |  ');
-
-    const extrasDiv = document.createElement('div');
-    extrasDiv.className = 'extras';
-    if (extras.length) extrasDiv.textContent = extras.join('\n');
-
-    root.appendChild(document.createElement('hr'));
-    const title = document.createElement('div'); title.className='nameTag'; title.style.margin='6px 0'; title.textContent = `Match #${idx+1}`; root.appendChild(title);
-    root.appendChild(grid);
-    if (meta.textContent) root.appendChild(meta);
-    if (extras.length) root.appendChild(extrasDiv);
-  });
-}
-
-async function findCounters(preset){
-  const M = preset || membersSelected();
-  if(M.length !== 5){ return; }
-  const payload = await api('findCounters', { members: encodeURIComponent(M.join('|')) });
-  renderResults(payload);
-}
-
-async function init(){
-  // back-to-top visibility
-  const btt = el('backToTop');
-  window.addEventListener('scroll', ()=>{
-    if (window.scrollY > 300) btt.style.display = 'block'; else btt.style.display = 'none';
-  });
-  btt.addEventListener('click', ()=>window.scrollTo({top:0, behavior:'smooth'}));
-
-  show('loadingSpinner','flex'); clearError();
-  try {
-    const [ping, pngs, teams, chars] = await Promise.all([
-      api('ping'), api('getPNGs'), api('getTeams'), api('getCharacters')
-    ]);
-    if(!ping.ok) throw new Error("Backend ping failed");
-    if(!pngs.ok || !teams.ok || !chars.ok) throw new Error("Data calls not OK");
-
-    if (pngs.map) {
-      PNG_MAP = pngs.map;
-    } else if (Array.isArray(pngs.pngs)) {
-      PNG_MAP = {};
-      pngs.pngs.forEach(({name,file}) => { if (name && file) PNG_MAP[String(name).toLowerCase()] = String(file); });
-    } else {
-      PNG_MAP = {};
-    }
-
-    CHARACTERS = chars.characters || chars.chars || [];
-    TEAMS = teams.teams || [];
-
-    el('teamSelect').innerHTML = optionsFrom(TEAMS, '(Optional) Choose a Team');
-    const charOpts = optionsFrom(CHARACTERS, 'Choose character');
-    for(let i=1;i<=5;i++){
-      el(`char${i}`).innerHTML = charOpts;
-      el(`char${i}`).addEventListener('change', ()=>{ updatePortrait(i); setResultsLoading(true); maybeAutoSearch(); });
-      updatePortrait(i);
-    }
-
-    el('teamSelect').addEventListener('change', async ()=>{
-      const team = val('teamSelect');
-      if(!team){ return; }
-      const tmsg = el('teamLoadingMsg');
-      tmsg.textContent = 'Loading team…';
-      show('teamLoadingMsg');
-      try{
-        const info = await api('getTeamMembers', { team });
-        if(info.ok && info.members){
-          info.members.forEach((name,idx) => {
-            const sel = el(`char${idx+1}`);
-            if (!name) return;
-            let i = Array.from(sel.options).findIndex(o => o.value.toLowerCase() === String(name).toLowerCase());
-            if (i < 0) { sel.insertAdjacentHTML('beforeend', `<option>${escapeHtml(name)}</option>`); i = Array.from(sel.options).length-1; }
-            sel.selectedIndex = i;
-            updatePortrait(idx+1);
-          });
-          setResultsLoading(true);
-          maybeAutoSearch();
-        }
-      } finally {
-        hide('teamLoadingMsg');
-      }
-    });
-
-    el('resetBtn').addEventListener('click', resetUI);
-  } catch(e) {
-    console.error(e);
-    showError('Failed to load data.');
-  } finally {
-    hide('loadingSpinner');
-  }
-}
-
-document.addEventListener('DOMContentLoaded', init);
+function escapeHtml(s){return (s==null?'':String(s)).replace(/[&<>\"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','\"':'&quot;'}[m]));}
